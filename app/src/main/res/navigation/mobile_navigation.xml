@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_children">
+
+    <fragment
+        android:id="@+id/navigation_schedule"
+        android:name="com.example.happytimeskindergarten.ui.schedule.ScheduleFragment"
+        android:label="@string/title_schedule"
+        tools:layout="@layout/fragment_schedule" />
+    <fragment
+        android:id="@+id/navigation_children"
+        android:name="com.example.happytimeskindergarten.ui.children.ChildenFragment"
+        android:label="@string/title_children"
+        tools:layout="@layout/fragment_childen" />
+    <fragment
+        android:id="@+id/navigation_teachers"
+        android:name="com.example.happytimeskindergarten.ui.teachers.TeachersFragment"
+        android:label="@string/title_teachers"
+        tools:layout="@layout/fragment_teachers" />
+    <fragment
+        android:id="@+id/navigation_feedback"
+        android:name="com.example.happytimeskindergarten.ui.feedback.FeedbackFragment"
+        android:label="@string/title_feedback"
+        tools:layout="@layout/fragment_feedback" />
+    <fragment
+        android:id="@+id/navigation_parents"
+        android:name="com.example.happytimeskindergarten.ui.parents.ParentsFragment"
+        android:label="@string/title_trusted_persons"
+        tools:layout="@layout/fragment_parents" />
+</navigation>
