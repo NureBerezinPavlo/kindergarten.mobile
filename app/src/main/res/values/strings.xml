@@ -28,6 +28,8 @@
     <string name="feedback_title">Слідкуйте за новинами в соцмережах</string>
     <string name="trusted_persons_title">Довірені особи</string>
     <string name="parent_title">Батько, на якого зареєстровано акаунт</string>
-    <string name="teachers_title">Вихователі</string>
     <string name="dialog_icon_save_changes">Зберегти</string>
+    <string name="emailTextView">Імейл:</string>
+    <string name="phoneNumberTextView">Телефон:</string>
+    <string name="notice_of_absence">Відмітити відсутність</string>
 </resources>

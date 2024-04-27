@@ -16,6 +16,11 @@
             android:orientation="vertical"
             android:layout_marginBottom="100dp">
 
+            <LinearLayout
+                android:id="@+id/parentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
             <TextView
                 android:id="@+id/textViewTitle"
                 android:layout_width="match_parent"
@@ -32,14 +37,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="25dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/rounded_corners_diseases_list"
                 android:minHeight="50dp"
                 android:orientation="vertical"
                 android:radius="12dp">
 
-                <include layout="@layout/person_data_block"/>
+                <include layout="@layout/person_data_block" />
             </LinearLayout>
-
+            </LinearLayout>
             <TextView
                 android:id="@+id/textViewTitle2"
                 android:layout_width="match_parent"
@@ -57,7 +61,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="25dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/rounded_corners_diseases_list"
                 android:minHeight="50dp"
                 android:orientation="vertical"
                 android:radius="12dp">
@@ -65,6 +68,16 @@
                 <include layout="@layout/person_data_block"/>
                 <include layout="@layout/person_data_block"/>
                 <include layout="@layout/person_data_block"/>
+                <Button
+                    android:id="@+id/addTrustedPersonButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:text="+"
+                    android:textStyle="bold"
+                    android:textColor="@color/dark_green"
+                    android:textSize="40dp"
+                    android:visibility="gone"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
@@ -73,23 +86,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/salad_green"
+        android:backgroundTint="@color/light_green"
         android:contentDescription="@string/app_name"
-        app:tint="@null"
+        app:tint="@color/white"
         android:src="@drawable/pencil_edit_icon"
         app:layout_anchor="@id/parentLinearLayout"
         app:layout_anchorGravity="top|right|end"
-        app:maxImageSize="40dp" />
+        app:maxImageSize="30dp" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/trustedPersonsEditButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/salad_green"
+        android:backgroundTint="@color/light_green"
         android:contentDescription="@string/app_name"
-        app:tint="@null"
+        app:tint="@color/white"
         android:src="@drawable/pencil_edit_icon"
         app:layout_anchor="@id/textViewTitle2"
         app:layout_anchorGravity="center|right|end"
-        app:maxImageSize="40dp" />
+        app:maxImageSize="30dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

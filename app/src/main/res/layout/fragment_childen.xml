@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.children.ChildenFragment">
+    tools:context=".ui.children.ChildenFragment"
+    android:background="@color/main_content_background">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -13,8 +14,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="100dp">
+                android:orientation="vertical">
                 <TextView
                     android:id="@+id/textViewTitle"
                     android:layout_width="match_parent"
@@ -27,109 +27,18 @@
                     android:textColor="@color/black"
                     android:text="@string/main_menu_title" />
                 <LinearLayout
-                    android:id="@+id/linearLayoutChildren"
+                    android:id="@+id/childrenLinearLayout"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="20dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginHorizontal="25dp"
+                    android:layout_marginTop="20dp"
+                    android:minHeight="50dp"
+                    android:orientation="vertical"
+                    android:radius="12dp">
 
-                    <RelativeLayout
-                        android:id="@+id/child_0"
-                        android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:layout_margin="10dp"
-                        android:padding="16dp"
-                        android:background="@color/light_gray"
-                        app:cornerRadius="30dp">
-
-                        <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/profileImage_0"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:layout_alignParentStart="true"
-                            android:layout_alignParentTop="false"
-                            android:layout_centerInParent="true"
-                            android:layout_marginEnd="16dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/child_1"
-                            app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
-
-                        <TextView
-                            android:id="@+id/nameTextView_0"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toEndOf="@id/profileImage_0"
-                            android:layout_alignParentTop="true"
-                            android:text="Ім'я Прізвище"
-                            android:textSize="30dp"
-                            android:textColor="@color/gray"
-                            android:layout_marginStart="10dp" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/child_1"
-                        android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:layout_margin="10dp"
-                        android:padding="16dp"
-                        android:background="@color/light_gray"
-                        app:cornerRadius="30dp">
-
-                        <com.google.android.material.imageview.ShapeableImageView
-                            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-                            android:id="@+id/profileImage_1"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:layout_alignParentStart="true"
-                            android:layout_alignParentTop="false"
-                            android:layout_centerInParent="true"
-                            android:layout_marginEnd="16dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/child_2" />
-
-                        <TextView
-                            android:id="@+id/nameTextView_1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toEndOf="@id/profileImage_1"
-                            android:layout_alignParentTop="true"
-                            android:text="Ім'я Прізвище"
-                            android:textSize="30dp"
-                            android:textColor="@color/gray"
-                            android:layout_marginStart="10dp" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/child_2"
-                        android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:layout_margin="10dp"
-                        android:padding="16dp"
-                        android:background="@color/light_gray"
-                        app:cornerRadius="30dp">
-
-                        <com.google.android.material.imageview.ShapeableImageView
-                            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-                            android:id="@+id/profileImage_2"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:layout_alignParentStart="true"
-                            android:layout_alignParentTop="false"
-                            android:layout_centerInParent="true"
-                            android:layout_marginEnd="16dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/child_3" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toEndOf="@id/profileImage_2"
-                            android:layout_alignParentTop="true"
-                            android:text="Ім'я Прізвище"
-                            android:textSize="30dp"
-                            android:textColor="@color/gray"
-                            android:layout_marginStart="10dp" />
-                    </RelativeLayout>
+                    <include layout="@layout/child_block" />
+                    <include layout="@layout/child_block" />
+                    <include layout="@layout/child_block" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
@@ -138,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:backgroundTint="@color/salad_green"
+        android:backgroundTint="@color/light_green"
         android:contentDescription="@string/app_name"
         android:src="@drawable/sign_out_icon"
         app:borderWidth="0dp"

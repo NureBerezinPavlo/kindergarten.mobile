@@ -39,8 +39,7 @@ public class ChildenFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(ChildenViewModel.class);
         // TODO: Use the ViewModel
 
-        LinearLayout childrenLinearLayout =
-                (LinearLayout) getView().findViewById(R.id.linearLayoutChildren);
+        LinearLayout childrenLinearLayout = getView().findViewById(R.id.childrenLinearLayout);
 
         int childrenQuantity = childrenLinearLayout.getChildCount();
 

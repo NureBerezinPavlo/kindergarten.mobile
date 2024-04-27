@@ -3,6 +3,7 @@ package com.example.happytimeskindergarten.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import com.example.happytimeskindergarten.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.time.LocalTime;
+
 public class ChildEditActivity extends AppCompatActivity {
 
     @Override
@@ -21,6 +24,7 @@ public class ChildEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_edit);
 
+        // Кнопка перехода обратно в главное меню с детьми
         View exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener()
         {
@@ -31,6 +35,7 @@ public class ChildEditActivity extends AppCompatActivity {
             }
         });
 
+        // Кнопка, которая открывает окно для указания аллергий
         View allergiesEditButton = findViewById(R.id.allergiesEditButton);
         allergiesEditButton.setOnClickListener(new View.OnClickListener()
         {
@@ -73,6 +78,7 @@ public class ChildEditActivity extends AppCompatActivity {
             }
         });
 
+        // Кнопка, которая открывает окно для указания болезней
         View diseasesEditButton = findViewById(R.id.diseasesEditButton);
         diseasesEditButton.setOnClickListener(new View.OnClickListener()
         {
@@ -118,5 +124,72 @@ public class ChildEditActivity extends AppCompatActivity {
                 });
             }
         });
+
+        // Кнопка для редиректа на список педагогов
+        View teachersButton = findViewById(R.id.teachersButton);
+        teachersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Intent teachersIntent = new Intent(ChildEditActivity.this, TeachersActivity.class);
+                startActivity(teachersIntent);
+            }
+        });
+
+        // Кнопка для редиректа на расписание
+        View scheduleButton = findViewById(R.id.scheduleButton);
+        scheduleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Intent scheduleIntent = new Intent(ChildEditActivity.this, ScheduleActivity.class);
+                startActivity(scheduleIntent);
+            }
+        });
+
+        // Кнопка, которая открывает окно для указания причины сегодняшнего отсутствия ребёнка
+        Button noticeOfAbsenceButton = (Button) findViewById(R.id.noticeOfAbsenceButton);
+        LocalTime currentTime = LocalTime.now();
+        if (currentTime.getHour() >= 10) {
+            noticeOfAbsenceButton.setActivated(false);
+        } else {
+            noticeOfAbsenceButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    View dialogBinding = getLayoutInflater().inflate(R.layout.edit_text_dialog_window, null);
+                    Dialog myDialog = new Dialog(ChildEditActivity.this);
+                    myDialog.setContentView(dialogBinding);
+                    myDialog.setCancelable(true);
+
+                    EditText editText = myDialog.findViewById(R.id.editText);
+                    TextView titleTextView = myDialog.findViewById(R.id.titleTextView);
+                    titleTextView.setText("Вкажіть причину");
+
+                    if (myDialog.getWindow() != null) {
+                        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    }
+                    myDialog.show();
+
+                    FloatingActionButton closeButton = dialogBinding.findViewById(R.id.closeButton);
+                    closeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            myDialog.cancel();
+                        }
+                    });
+
+                    Button safeButton = dialogBinding.findViewById(R.id.safeButton);
+                    safeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            // сохраняем где-то текст с причиной отсутствия (он в editText)
+                            myDialog.cancel();
+                        }
+                    });
+                }
+            });
+        }
     }
 }

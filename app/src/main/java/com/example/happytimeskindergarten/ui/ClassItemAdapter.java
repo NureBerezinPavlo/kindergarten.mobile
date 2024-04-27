@@ -31,7 +31,7 @@ public class ClassItemAdapter extends RecyclerView.Adapter<ClassViewHolder>
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.class_cell, parent, false);
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-        layoutParams.height = 300;
+        layoutParams.height = 260;
 
         return new ClassViewHolder (view, onItemListener);
     }
