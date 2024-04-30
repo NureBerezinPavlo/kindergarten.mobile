@@ -4,21 +4,25 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.happytimeskindergarten.R;
-import com.example.happytimeskindergarten.ui.ChildEditActivity;
-import com.example.happytimeskindergarten.ui.ParentEditActivity;
+import com.example.happytimeskindergarten.ui.OnePersonEditActivity;
+import com.example.happytimeskindergarten.ui.Person;
+import com.example.happytimeskindergarten.ui.TrustedPersonAdapter;
+import com.example.happytimeskindergarten.ui.TrustedPersonsListEditActivity;
 
-public class ParentsFragment extends Fragment {
+import java.util.ArrayList;
 
+public class ParentsFragment extends Fragment implements TrustedPersonAdapter.OnItemListener
+{
     private ParentsViewModel mViewModel;
 
     public static ParentsFragment newInstance() {
@@ -38,12 +42,23 @@ public class ParentsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ParentsViewModel.class);
 
+        // Заполнение динамического списка доверенных лиц
+        // Содержимое списка чисто для проверки работоспособности, а так заполняем с сервера
+        ArrayList<Person> personsList = new ArrayList<Person>() {{
+            add(new Person("Березін Павло Павлович", "pberezin97@gmail.com", "+880-333-26-05"));
+            add(new Person("Лантінов Володимир", "lantiniff@gmail.com", "+8-800-555-35-35"));
+            add(new Person("Сахань Дмитро", "dimka@mail.com", "+333-696-96-96"));
+        }};
+
+        UpdateRecyclerView(personsList);
+
+        // события на кнопки редактирования
         View parentEditButton = getView().findViewById(R.id.parentEditButton);
         parentEditButton.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)
             {
-                Intent childEditIntent = new Intent(getActivity(), ParentEditActivity.class);
+                Intent childEditIntent = new Intent(getActivity(), OnePersonEditActivity.class);
                 startActivity(childEditIntent);
             }
         });
@@ -52,20 +67,39 @@ public class ParentsFragment extends Fragment {
         trustedPersonsEditButton.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)
-            {/*
-                View addButton = getView().findViewById(R.id.addTrustedPersonButton);
-                addButton.setVisibility(View.VISIBLE);
-
-                View bottomMenu = getActivity().findViewById(R.id.nav_view);
-                bottomMenu.setVisibility(View.GONE);
-
-                View parentContainer = getView().findViewById(R.id.parentContainer);
-                parentContainer.setVisibility(View.GONE);
-
-                View parentEditButton = getView().findViewById(R.id.parentEditButton);
-                parentEditButton.setVisibility(View.GONE);*/
+            {
+                Intent intent = new Intent(getActivity(), TrustedPersonsListEditActivity.class);
+                intent.putExtra("trusted_persons_list", personsList);
+                startActivityForResult(intent, 2);
             }
         });
     }
+    public void UpdateRecyclerView(ArrayList<Person> personsList)
+    {
+        RecyclerView trustedPersonsRecyclerView =
+                getActivity().findViewById(R.id.trustedPersonsRecyclerView);
 
+        TrustedPersonAdapter adapter = new TrustedPersonAdapter(personsList, this);
+        RecyclerView.LayoutManager layoutManager =
+                new GridLayoutManager(requireContext(), 1);
+
+        trustedPersonsRecyclerView.setLayoutManager(layoutManager);
+        trustedPersonsRecyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(data == null) return;
+
+        ArrayList<Person> persons = (ArrayList<Person>) data.getSerializableExtra("persons_arraylist");
+        UpdateRecyclerView(persons);
+    }
+
+    @Override
+    public void onItemClick(int position, String fullName, String email, String phoneNumber) {
+        // здесь можно указать, что будет, если пользователь нажмёт на элемент из recyclerView
+    }
 }

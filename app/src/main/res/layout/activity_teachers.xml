@@ -9,14 +9,12 @@
     android:background="@color/main_content_background">
 
 <androidx.core.widget.NestedScrollView
-    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginBottom="100dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textViewTitle"
@@ -28,20 +26,12 @@
             android:textColor="@color/black"
             android:layout_marginTop="30dp"
             android:text="@string/title_teachers" />
-        <LinearLayout
-            android:id="@+id/teachersLinearLayout"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/teachersRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="25dp"
-            android:layout_marginTop="10dp"
-            android:minHeight="50dp"
-            android:orientation="vertical"
-            android:radius="12dp">
-
-            <include layout="@layout/person_data_block" />
-            <include layout="@layout/person_data_block" />
-            <include layout="@layout/person_data_block" />
-        </LinearLayout>
+            android:layout_marginTop="10dp" />
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

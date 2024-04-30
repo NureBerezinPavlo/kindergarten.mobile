@@ -1,55 +1,34 @@
 package com.example.happytimeskindergarten.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.ClipData;
-import android.content.Context;
-import android.content.ClipboardManager;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.happytimeskindergarten.R;
+import java.util.ArrayList;
 
-public class TeachersActivity extends AppCompatActivity {
+public class TeachersActivity extends AppCompatActivity implements TeacherAdapter.OnItemListener
+{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teachers);
 
-        LinearLayout allTeachers = findViewById(R.id.teachersLinearLayout);
-        int childrenQuantity = allTeachers.getChildCount();
+        ArrayList<Person> personsList = new ArrayList<Person>() {{
+            add(new Person("Рубаненко Марія", "mashaagent007@gmail.com", "+380-963-12-34"));
+            add(new Person("Бистрицька Настя", "kei_rin0@gmail.com", "+123-456-78-90"));
+            add(new Person("Голоха Нікіта", "nikitagoloha@mail.com", "++111-222-33-44"));
+        }};
 
-        for (int i = 0; i < childrenQuantity; i++) {
-            View oneTeacher = allTeachers.getChildAt(i);
+        RecyclerView allTeachersRecyclerView = findViewById(R.id.teachersRecyclerView);
+        TeacherAdapter adapter = new TeacherAdapter(personsList, this);
+        RecyclerView.LayoutManager layoutManager =
+                new GridLayoutManager(getApplicationContext(), 1);
+        allTeachersRecyclerView.setLayoutManager(layoutManager);
+        allTeachersRecyclerView.setAdapter(adapter);
 
-            TextView emailTextView = oneTeacher.findViewById(R.id.emailTextView);
-            TextView phoneNumberTextView = oneTeacher.findViewById(R.id.phoneNumberTextView);
-
-            // Копирование имейла и телефона в буфер обмена при нажатии на соответствующие TextView
-            emailTextView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("label", emailTextView.getText());
-                    clipboard.setPrimaryClip(clip);
-
-                    Toast.makeText(getApplicationContext(),
-                            "Імейл скопійовано до буферу обміну", Toast.LENGTH_SHORT).show();
-                }
-            });
-            phoneNumberTextView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("label", phoneNumberTextView.getText());
-                    clipboard.setPrimaryClip(clip);
-
-                    Toast.makeText(getApplicationContext(), "Телефон скопійовано до буферу обміну", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
         View exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,5 +36,11 @@ public class TeachersActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+
+    @Override
+    public void onItemClick(int position, String fullName, String email, String phoneNumber)
+    {
+        // здесь можно указать, что будет, если пользователь нажмёт на элемент из recyclerView
     }
 }

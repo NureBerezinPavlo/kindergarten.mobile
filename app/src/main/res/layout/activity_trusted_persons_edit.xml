@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.TrustedPersonsEditActivity"
+    tools:context=".ui.TrustedPersonsListEditActivity"
     android:background="@color/fields_grouping_background" >
 
     <androidx.core.widget.NestedScrollView
@@ -18,7 +18,7 @@
             android:layout_marginBottom="100dp">
 
             <TextView
-                android:id="@+id/textViewTitle2"
+                android:id="@+id/textViewTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -28,7 +28,6 @@
                 android:textColor="@color/black"
                 android:text="@string/trusted_persons_title" />
             <LinearLayout
-                android:id="@+id/trustedPersonsLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="25dp"
@@ -38,9 +37,10 @@
                 android:orientation="vertical"
                 android:radius="12dp">
 
-                <include layout="@layout/person_data_block"/>
-                <include layout="@layout/person_data_block"/>
-                <include layout="@layout/person_data_block"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/trustedPersonsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
                 <Button
                     android:id="@+id/addTrustedPersonButton"
                     android:layout_width="match_parent"
@@ -53,4 +53,17 @@
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/light_green"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/back_icon"
+        app:borderWidth="0dp"
+        app:tint="@color/white"
+        app:layout_anchor="@id/textViewTitle"
+        app:layout_anchorGravity="top|left|end"
+        app:maxImageSize="40dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

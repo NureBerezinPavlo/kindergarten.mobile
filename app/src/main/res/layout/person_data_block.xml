@@ -6,7 +6,6 @@ android:layout_width="match_parent"
 android:layout_height="match_parent">
 
 <LinearLayout
-    android:id="@+id/linearLayout2"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -19,7 +18,7 @@ android:layout_height="match_parent">
     android:background="@drawable/rounded_corners_diseases_list" >
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/photoAndFullname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -36,7 +35,7 @@ android:layout_height="match_parent">
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
 
         <TextView
-            android:id="@+id/nameTextView_0"
+            android:id="@+id/fullNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

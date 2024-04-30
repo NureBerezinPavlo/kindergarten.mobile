@@ -22,10 +22,10 @@
             android:name=".ui.ScheduleActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.TrustedPersonsEditActivity"
+            android:name=".ui.TrustedPersonsListEditActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.ParentEditActivity"
+            android:name=".ui.OnePersonEditActivity"
             android:exported="false" />
         <activity
             android:name=".ui.SignInActivity"

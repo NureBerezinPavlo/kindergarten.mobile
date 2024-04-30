@@ -3,26 +3,13 @@ package com.example.happytimeskindergarten.ui;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.Dialog;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.example.happytimeskindergarten.R;
-import com.example.happytimeskindergarten.ui.ClassItem;
-import com.example.happytimeskindergarten.ui.ClassItemAdapter;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,7 +92,7 @@ public class ScheduleActivity extends AppCompatActivity implements ClassItemAdap
         }};
 
         for (int i = 0; i < 7; i++) {
-            ClassItemAdapter adapter = new ClassItemAdapter(classesJaggedList.get(i), this);
+            ClassItemAdapter adapter = new ClassItemAdapter(classesJaggedList.get(i)/*, this*/);
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 1);
 
             RecyclerView classesColumnRecyclerView = (RecyclerView) scheduleLinearLayout.getChildAt(i);

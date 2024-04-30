@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.happytimeskindergarten.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -26,22 +27,18 @@ public class ChildEditActivity extends AppCompatActivity {
 
         // Кнопка перехода обратно в главное меню с детьми
         View exitButton = findViewById(R.id.exitButton);
-        exitButton.setOnClickListener(new View.OnClickListener()
-        {
+        exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 onBackPressed();
             }
         });
 
         // Кнопка, которая открывает окно для указания аллергий
         View allergiesEditButton = findViewById(R.id.allergiesEditButton);
-        allergiesEditButton.setOnClickListener(new View.OnClickListener()
-        {
+        allergiesEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 View dialogBinding = getLayoutInflater().inflate(R.layout.edit_text_dialog_window, null);
                 Dialog myDialog = new Dialog(ChildEditActivity.this);
                 myDialog.setContentView(dialogBinding);
@@ -60,8 +57,7 @@ public class ChildEditActivity extends AppCompatActivity {
                 FloatingActionButton closeButton = dialogBinding.findViewById(R.id.closeButton);
                 closeButton.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v)
-                    {
+                    public void onClick(View v) {
                         myDialog.cancel();
                     }
                 });
@@ -69,8 +65,7 @@ public class ChildEditActivity extends AppCompatActivity {
                 Button safeButton = dialogBinding.findViewById(R.id.safeButton);
                 safeButton.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v)
-                    {
+                    public void onClick(View v) {
                         allergiesTextView.setText(editText.getText());
                         myDialog.cancel();
                     }
@@ -80,11 +75,9 @@ public class ChildEditActivity extends AppCompatActivity {
 
         // Кнопка, которая открывает окно для указания болезней
         View diseasesEditButton = findViewById(R.id.diseasesEditButton);
-        diseasesEditButton.setOnClickListener(new View.OnClickListener()
-        {
+        diseasesEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 View dialogBinding = getLayoutInflater().inflate(R.layout.edit_text_dialog_window, null);
                 Dialog myDialog = new Dialog(ChildEditActivity.this);
                 myDialog.setContentView(dialogBinding);
@@ -107,8 +100,7 @@ public class ChildEditActivity extends AppCompatActivity {
                 FloatingActionButton closeButton = dialogBinding.findViewById(R.id.closeButton);
                 closeButton.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v)
-                    {
+                    public void onClick(View v) {
                         myDialog.cancel();
                     }
                 });
@@ -116,8 +108,7 @@ public class ChildEditActivity extends AppCompatActivity {
                 Button safeButton = dialogBinding.findViewById(R.id.safeButton);
                 safeButton.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v)
-                    {
+                    public void onClick(View v) {
                         diseasesTextView.setText(editText.getText());
                         myDialog.cancel();
                     }
@@ -129,8 +120,7 @@ public class ChildEditActivity extends AppCompatActivity {
         View teachersButton = findViewById(R.id.teachersButton);
         teachersButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 Intent teachersIntent = new Intent(ChildEditActivity.this, TeachersActivity.class);
                 startActivity(teachersIntent);
             }
@@ -140,9 +130,9 @@ public class ChildEditActivity extends AppCompatActivity {
         View scheduleButton = findViewById(R.id.scheduleButton);
         scheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 Intent scheduleIntent = new Intent(ChildEditActivity.this, ScheduleActivity.class);
+                // передаём в интент данные из текущего активити
                 startActivity(scheduleIntent);
             }
         });
@@ -150,12 +140,11 @@ public class ChildEditActivity extends AppCompatActivity {
         // Кнопка, которая открывает окно для указания причины сегодняшнего отсутствия ребёнка
         Button noticeOfAbsenceButton = (Button) findViewById(R.id.noticeOfAbsenceButton);
         LocalTime currentTime = LocalTime.now();
-        if (currentTime.getHour() >= 10) {
-            noticeOfAbsenceButton.setActivated(false);
-        } else {
-            noticeOfAbsenceButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+
+        noticeOfAbsenceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentTime.getHour() < 10) {
                     View dialogBinding = getLayoutInflater().inflate(R.layout.edit_text_dialog_window, null);
                     Dialog myDialog = new Dialog(ChildEditActivity.this);
                     myDialog.setContentView(dialogBinding);
@@ -173,8 +162,7 @@ public class ChildEditActivity extends AppCompatActivity {
                     FloatingActionButton closeButton = dialogBinding.findViewById(R.id.closeButton);
                     closeButton.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v)
-                        {
+                        public void onClick(View v) {
                             myDialog.cancel();
                         }
                     });
@@ -182,14 +170,15 @@ public class ChildEditActivity extends AppCompatActivity {
                     Button safeButton = dialogBinding.findViewById(R.id.safeButton);
                     safeButton.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v)
-                        {
+                        public void onClick(View v) {
                             // сохраняем где-то текст с причиной отсутствия (он в editText)
                             myDialog.cancel();
                         }
                     });
+                } else {
+                    Toast.makeText(getApplicationContext(), "Час для повідомлення про відсутність сплинув.", Toast.LENGTH_SHORT).show();
                 }
-            });
-        }
+            }
+        });
     }
 }

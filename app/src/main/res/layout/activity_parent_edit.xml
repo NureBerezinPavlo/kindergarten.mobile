@@ -5,7 +5,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context=".ui.ParentEditActivity"
+tools:context=".ui.OnePersonEditActivity"
 android:background="@color/main_content_background">
 
 <androidx.core.widget.NestedScrollView
@@ -34,24 +34,42 @@ android:background="@color/main_content_background">
             android:layout_marginTop="20dp"
             android:layout_margin="10dp"/>
 
-        <TextView
-            android:id="@+id/textViewChildFullName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="20dp"
-            android:text="Прізвище Ім'я По батькові"
-            android:textColor="@color/black"
-            android:textSize="30dp"
-            android:textStyle="bold" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginStart="25dp"
             android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="none"
+                    android:singleLine="false"
+                    android:layout_weight="3"
+                    android:text="@string/full_name"
+                    android:textColor="@color/black"
+                    android:textSize="25dp"
+                    android:textStyle="bold"/>
+                <EditText
+                    android:id="@+id/fullNameEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="7"
+                    android:gravity="top"
+                    android:hint="Введіть текст"
+                    android:inputType="textMultiLine"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+                    android:importantForAutofill="no" />
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,6 +132,7 @@ android:background="@color/main_content_background">
             </LinearLayout>
         </LinearLayout>
         <Button
+            android:id="@+id/saveDataButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="40dp"
@@ -123,6 +142,7 @@ android:background="@color/main_content_background">
             android:textColor="@color/white"
             android:textSize="30dp" />
         <Button
+            android:id="@+id/deleteDataButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="40dp"
@@ -139,7 +159,7 @@ android:background="@color/main_content_background">
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
-    android:backgroundTint="@color/salad_green"
+    android:backgroundTint="@color/light_green"
     android:contentDescription="@string/app_name"
     android:src="@drawable/back_icon"
     app:borderWidth="0dp"
@@ -151,7 +171,7 @@ android:background="@color/main_content_background">
         android:id="@+id/changeAvatarButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/salad_green"
+        android:backgroundTint="@color/light_green"
         android:contentDescription="@string/app_name"
         android:src="@drawable/camera_icon"
         app:borderWidth="0dp"

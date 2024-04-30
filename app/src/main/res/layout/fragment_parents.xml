@@ -55,30 +55,17 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:text="@string/trusted_persons_title" />
-            <LinearLayout
-                android:id="@+id/trustedPersonsLinearLayout"
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/trustedPersonsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="25dp"
                 android:layout_marginTop="10dp"
                 android:minHeight="50dp"
                 android:orientation="vertical"
-                android:radius="12dp">
-
-                <include layout="@layout/person_data_block"/>
-                <include layout="@layout/person_data_block"/>
-                <include layout="@layout/person_data_block"/>
-                <Button
-                    android:id="@+id/addTrustedPersonButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/transparent"
-                    android:text="+"
-                    android:textStyle="bold"
-                    android:textColor="@color/dark_green"
-                    android:textSize="40dp"
-                    android:visibility="gone"/>
-            </LinearLayout>
+                android:radius="12dp"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
