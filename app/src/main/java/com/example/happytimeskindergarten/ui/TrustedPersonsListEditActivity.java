@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.happytimeskindergarten.R;
 
@@ -43,6 +44,7 @@ public class TrustedPersonsListEditActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v)
             {
+                adapter = (TrustedPersonAdapter)recyclerView.getAdapter();
                 Intent intent = new Intent();
                 intent.putExtra("persons_arraylist", adapter.personsArraylist);
 
@@ -95,7 +97,7 @@ public class TrustedPersonsListEditActivity extends AppCompatActivity implements
             persons.get(selectedPersonIndex).phoneNumber = phone_number;
         } else if (requestCode == 2) {
             Person person = (Person)data.getSerializableExtra("parent");
-            TrustedPersonAdapter adapter = (TrustedPersonAdapter) recyclerView.getAdapter();
+            adapter = (TrustedPersonAdapter) recyclerView.getAdapter();
             adapter.personsArraylist.add(person);
             UpdateRecyclerView(adapter.personsArraylist);
         }

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.happytimeskindergarten.R;
 import com.example.happytimeskindergarten.ui.OnePersonEditActivity;
@@ -106,8 +107,12 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
 
         if(data == null) return;
 
-        personsList = (ArrayList<Person>) data.getSerializableExtra("persons_arraylist");
-        if(personsList != null) UpdateRecyclerView(personsList);
+        ArrayList<Person> temporaryPersonsList = (ArrayList<Person>) data.getSerializableExtra("persons_arraylist");
+        if(temporaryPersonsList != null)
+        {
+            personsList = temporaryPersonsList;
+            UpdateRecyclerView(personsList);
+        }
 
         Person parent = (Person)data.getSerializableExtra("parent");
         if(parent != null)
