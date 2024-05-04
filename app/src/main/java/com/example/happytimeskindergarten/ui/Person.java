@@ -3,7 +3,7 @@ import java.io.Serializable;
 
 public class Person implements Serializable
 {
-    String fullName, email, phoneNumber;
+    public String fullName, email, phoneNumber;
 
     public Person(String fullName, String email, String phoneNumber)
     {

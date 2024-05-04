@@ -1,10 +1,7 @@
 package com.example.happytimeskindergarten.ui;
 
-import androidx.activity.result.contract.ActivityResultContract;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -14,54 +11,34 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.canhub.cropper.CropImage;
 import com.example.happytimeskindergarten.R;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.io.IOException;
+import java.io.Serial;
+import java.io.Serializable;
 
-public class OnePersonEditActivity extends AppCompatActivity implements View.OnClickListener
+public class PersonEditWithoutDeletingActivity extends AppCompatActivity implements View.OnClickListener
 {
     private static final int PICK_IMAGE_REQUEST = 1;
-    private static final int DELETE_REQUEST = 2;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_one_trusted_person_edit);
+        setContentView(R.layout.activity_person_edit_without_deleting);
 
         View changeAvatarButton = findViewById(R.id.changeAvatarButton);
-        changeAvatarButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
+        changeAvatarButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, PICK_IMAGE_REQUEST);
             }
         });
 
         View exitButton = findViewById(R.id.exitButton);
-        exitButton.setOnClickListener(new View.OnClickListener()
-        {
+        exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 onBackPressed();
-            }
-        });
-
-        View deleteDataButton = findViewById(R.id.deleteDataButton);
-        deleteDataButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                //Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                Intent intent = new Intent();
-                intent.putExtra("is_deleted", true);
-                setResult(RESULT_OK, intent);
-                finish();
             }
         });
 
@@ -69,18 +46,13 @@ public class OnePersonEditActivity extends AppCompatActivity implements View.OnC
         saveDataButton.setOnClickListener(this);
 
         Bundle arguments = getIntent().getExtras();
+        if (arguments == null) return;
 
-        String full_name = arguments.getString("full_name");
-        String email = arguments.getString("email");
-        String phone_number = arguments.getString("phone_number");
+        Person person = (Person) arguments.getSerializable(Person.class.getSimpleName());
 
-        TextView fullNameTextView = findViewById(R.id.fullNameEditText);
-        TextView emailTextView = findViewById(R.id.emailEditText);
-        TextView phoneNumberTextView = findViewById(R.id.phoneNumberEditText);
-
-        fullNameTextView.setText(full_name);
-        emailTextView.setText(email);
-        phoneNumberTextView.setText(phone_number);
+        ((EditText) findViewById(R.id.fullNameEditText)).setText(person.fullName);
+        ((EditText) findViewById(R.id.emailEditText)).setText(person.email);
+        ((EditText) findViewById(R.id.phoneNumberEditText)).setText(person.phoneNumber);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -105,9 +77,9 @@ public class OnePersonEditActivity extends AppCompatActivity implements View.OnC
 
         Intent intent = new Intent();
         // добавить валидацию введённых данных
-        intent.putExtra("full_name", fullNameEditText.getText().toString());
-        intent.putExtra("email", emailEditText.getText().toString());
-        intent.putExtra("phone_number", phoneNumberEditText.getText().toString());
+        Person person = new Person(fullNameEditText.getText().toString(),
+                emailEditText.getText().toString(), phoneNumberEditText.getText().toString());
+        intent.putExtra("parent", person);
 
         setResult(RESULT_OK, intent);
         finish();

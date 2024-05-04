@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class TrustedPersonsListEditActivity extends AppCompatActivity implements TrustedPersonAdapter.OnItemListener
 {
     RecyclerView recyclerView;
+    TrustedPersonAdapter adapter;
     View selectedPersonView;
     int selectedPersonIndex;
 
@@ -24,12 +25,16 @@ public class TrustedPersonsListEditActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trusted_persons_edit);
 
+        recyclerView = findViewById(R.id.trustedPersonsRecyclerView);
+        adapter = (TrustedPersonAdapter)recyclerView.getAdapter();
         UpdateRecyclerView((ArrayList<Person>) getIntent().getSerializableExtra("trusted_persons_list"));
 
         View addTrustedPersonButton = findViewById(R.id.addTrustedPersonButton);
         addTrustedPersonButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                // добавить доверенное лицо
+                Intent intent = new Intent(TrustedPersonsListEditActivity.this,
+                        PersonEditWithoutDeletingActivity.class);
+                startActivityForResult(intent, 2);
             }
         });
 
@@ -38,10 +43,6 @@ public class TrustedPersonsListEditActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v)
             {
-                //onBackPressed();
-                recyclerView = findViewById(R.id.trustedPersonsRecyclerView);
-                TrustedPersonAdapter adapter = (TrustedPersonAdapter)recyclerView.getAdapter();
-
                 Intent intent = new Intent();
                 intent.putExtra("persons_arraylist", adapter.personsArraylist);
 
@@ -61,28 +62,43 @@ public class TrustedPersonsListEditActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(data == null || selectedPersonView == null) return;
+        if (requestCode == 1) {
+            if (data == null || selectedPersonView == null) return;
 
-        String full_name = data.getStringExtra("full_name");
-        String email = data.getStringExtra("email");
-        String phone_number = data.getStringExtra("phone_number");
+            String full_name = data.getStringExtra("full_name");
+            String email = data.getStringExtra("email");
+            String phone_number = data.getStringExtra("phone_number");
 
-        TextView fullNameTextView = selectedPersonView.findViewById(R.id.fullNameTextView);
-        TextView emailTextView = selectedPersonView.findViewById(R.id.emailTextView);
-        TextView phoneNumberTextView = selectedPersonView.findViewById(R.id.phoneNumberTextView);
+            Boolean is_deleted = data.getBooleanExtra("is_deleted", false);
 
-        fullNameTextView.setText(full_name);
-        emailTextView.setText(email);
-        phoneNumberTextView.setText(phone_number);
+            if (is_deleted) {
+                TrustedPersonAdapter adapter = (TrustedPersonAdapter) recyclerView.getAdapter();
+                adapter.personsArraylist.remove(selectedPersonIndex);
+                UpdateRecyclerView(adapter.personsArraylist);
+                return;
+            }
 
-        ArrayList<Person> persons = ((TrustedPersonAdapter)recyclerView.getAdapter()).personsArraylist;
-        persons.get(selectedPersonIndex).fullName = full_name;
-        persons.get(selectedPersonIndex).email = email;
-        persons.get(selectedPersonIndex).phoneNumber = phone_number;
+            TextView fullNameTextView = selectedPersonView.findViewById(R.id.fullNameTextView);
+            TextView emailTextView = selectedPersonView.findViewById(R.id.emailTextView);
+            TextView phoneNumberTextView = selectedPersonView.findViewById(R.id.phoneNumberTextView);
+
+            fullNameTextView.setText(full_name);
+            emailTextView.setText(email);
+            phoneNumberTextView.setText(phone_number);
+
+            ArrayList<Person> persons = ((TrustedPersonAdapter) recyclerView.getAdapter()).personsArraylist;
+            persons.get(selectedPersonIndex).fullName = full_name;
+            persons.get(selectedPersonIndex).email = email;
+            persons.get(selectedPersonIndex).phoneNumber = phone_number;
+        } else if (requestCode == 2) {
+            Person person = (Person)data.getSerializableExtra("parent");
+            TrustedPersonAdapter adapter = (TrustedPersonAdapter) recyclerView.getAdapter();
+            adapter.personsArraylist.add(person);
+            UpdateRecyclerView(adapter.personsArraylist);
+        }
     }
 
     public void onBackPressed() {

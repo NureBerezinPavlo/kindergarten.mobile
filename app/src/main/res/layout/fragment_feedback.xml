@@ -114,12 +114,12 @@
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/viber_icon" />
+                        android:src="@drawable/instagram_icon" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="Чат у вайбері"
+                        android:text="Офіційна група в інстаграмі"
                         android:textColor="@color/gray"
                         android:textSize="25dp"
                         android:textStyle="bold" />
