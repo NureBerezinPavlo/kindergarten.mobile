@@ -3,25 +3,20 @@ package com.example.happytimeskindergarten.ui;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
 import com.example.happytimeskindergarten.R;
-
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.List;
 
 public class ClassItemAdapter extends RecyclerView.Adapter<ClassViewHolder>
 {
     List<ClassItem> classesArraylist;
-    OnItemListener onItemListener;
+    //OnItemListener onItemListener;
 
-    public ClassItemAdapter(List<ClassItem> classesArraylist, OnItemListener onItemListener)
+    public ClassItemAdapter(List<ClassItem> classesArraylist/*, OnItemListener onItemListener*/)
     {
         this.classesArraylist = classesArraylist;
-        this.onItemListener = onItemListener;
+        //this.onItemListener = onItemListener;
     }
 
     @NonNull
@@ -31,9 +26,9 @@ public class ClassItemAdapter extends RecyclerView.Adapter<ClassViewHolder>
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.class_cell, parent, false);
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-        layoutParams.height = 300;
+        layoutParams.height = 260;
 
-        return new ClassViewHolder (view, onItemListener);
+        return new ClassViewHolder (view/*, onItemListener*/);
     }
 
     @Override

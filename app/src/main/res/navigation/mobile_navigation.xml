@@ -6,20 +6,10 @@
     app:startDestination="@+id/navigation_children">
 
     <fragment
-        android:id="@+id/navigation_schedule"
-        android:name="com.example.happytimeskindergarten.ui.schedule.ScheduleFragment"
-        android:label="@string/title_schedule"
-        tools:layout="@layout/fragment_schedule" />
-    <fragment
         android:id="@+id/navigation_children"
         android:name="com.example.happytimeskindergarten.ui.children.ChildenFragment"
         android:label="@string/title_children"
         tools:layout="@layout/fragment_childen" />
-    <fragment
-        android:id="@+id/navigation_teachers"
-        android:name="com.example.happytimeskindergarten.ui.teachers.TeachersFragment"
-        android:label="@string/title_teachers"
-        tools:layout="@layout/fragment_teachers" />
     <fragment
         android:id="@+id/navigation_feedback"
         android:name="com.example.happytimeskindergarten.ui.feedback.FeedbackFragment"

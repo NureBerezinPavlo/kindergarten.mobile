@@ -4,41 +4,35 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.happytimeskindergarten.R;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.Console;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
-import retrofit2.http.Path;
 public class SignInActivity extends AppCompatActivity {
 
-    interface RequestUser {
-        @GET("/api/users/{uid}")
-        Call<UserData> getUser(@Path("uid") String uid);
-    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8000")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        RequestUser requestUser = retrofit.create(RequestUser.class);
+
         View signOutButton = findViewById(R.id.signInButton);
+        TextInputEditText email = findViewById(R.id.email);
+        TextInputEditText password = findViewById(R.id.password);
         signOutButton.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)
             {
-                requestUser.getUser("2").enqueue(new Callback<UserData>() {
+                Request.requestUser.login(email.getText().toString(),password.getText().toString(),"asasas").enqueue(new Callback<Auth>() {
                     @Override
-                    public void onResponse(Call<UserData> call, Response<UserData> response) {
+                    public void onResponse(Call<Auth> call, Response<Auth> response) {
+                        Request.setToken(response.body().token);
                         // тут надо прописать условие, при котором осуществится переход в соответствующий аккаунт
                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -46,8 +40,8 @@ public class SignInActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<UserData> call, Throwable t) {
-                        System.out.println("skdjskdjskdjskdjdjskdskdj");
+                    public void onFailure(Call<Auth> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), "Некоректні логін або пароль", Toast.LENGTH_SHORT).show();
                     }
                 });
 

@@ -6,17 +6,9 @@
         android:icon="@drawable/parents_trusted_persons_list_icon"
         android:title="@string/title_trusted_persons" />
     <item
-        android:id="@+id/navigation_schedule"
-        android:icon="@drawable/calendar_schedule_icon"
-        android:title="@string/title_schedule" />
-    <item
         android:id="@+id/navigation_children"
         android:icon="@drawable/child_children_list_icon"
         android:title="@string/title_children" />
-    <item
-        android:id="@+id/navigation_teachers"
-        android:icon="@drawable/teachers_list_icon"
-        android:title="@string/title_teachers" />
     <item
         android:id="@+id/navigation_feedback"
         android:icon="@drawable/feedback_icon"

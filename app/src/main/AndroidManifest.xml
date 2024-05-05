@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET"/>
+
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
@@ -13,6 +18,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HappyTimesKindergarten"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.TeachersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ScheduleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.TrustedPersonsListEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.OnePersonEditActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.SignInActivity"
             android:exported="false" />
