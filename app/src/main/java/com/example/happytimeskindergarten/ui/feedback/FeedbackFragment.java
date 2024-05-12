@@ -16,11 +16,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.happytimeskindergarten.R;
+import com.example.happytimeskindergarten.ui.Request;
 
 import java.util.List;
 
 public class FeedbackFragment extends Fragment {
-
     private FeedbackViewModel mViewModel;
 
     public static FeedbackFragment newInstance() {
@@ -38,8 +38,8 @@ public class FeedbackFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(FeedbackViewModel.class);
 
-        String[] urlsArray = {"https://www.facebook.com/", "https://www.youtube.com/",
-                "https://web.telegram.org", "https://www.viber.com/ua/"};
+        String[] urlsArray = {"https://www.facebook.com/nureKharkiv/", "https://www.youtube.com/user/nuretv",
+                "https://t.me/nure_osvita", "https://www.instagram.com/khnure_official/"};
         LinearLayout socialMediaLinearLayout = getActivity().findViewById(R.id.socialMediaLinearLayout);
         for (int i = 0; i < urlsArray.length; i++) {
             String url = urlsArray[i];

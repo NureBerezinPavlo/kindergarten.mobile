@@ -7,7 +7,6 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context=".ui.OnePersonEditActivity"
 android:background="@color/main_content_background">
-
 <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -179,4 +178,5 @@ android:background="@color/main_content_background">
         app:layout_anchor="@id/profileImage"
         app:layout_anchorGravity="bottom|right|end"
         app:maxImageSize="45dp" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -35,7 +35,7 @@
                 android:layout_margin="10dp"/>
 
             <TextView
-                android:id="@+id/textViewChildFullName"
+                android:id="@+id/fullNameTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
@@ -53,7 +53,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textViewBirthday"
+                    android:id="@+id/dateOfBirthTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="none"

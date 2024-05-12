@@ -3,6 +3,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -29,10 +30,14 @@ public class SignInActivity extends AppCompatActivity {
         {
             public void onClick(View view)
             {
+
                 Request.requestUser.login(email.getText().toString(),password.getText().toString(),"asasas").enqueue(new Callback<Auth>() {
                     @Override
                     public void onResponse(Call<Auth> call, Response<Auth> response) {
-                        Request.setToken(response.body().token);
+                        User.setToken(response.body().token);
+                        User.setId(response.body().id);
+                        User.setFamily_account_id(response.body().family_account_id);
+
                         // тут надо прописать условие, при котором осуществится переход в соответствующий аккаунт
                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -44,6 +49,7 @@ public class SignInActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Некоректні логін або пароль", Toast.LENGTH_SHORT).show();
                     }
                 });
+
 
             }
         });

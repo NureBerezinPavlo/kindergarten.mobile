@@ -14,7 +14,7 @@
         app:cornerRadius="30dp">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/profileImage_0"
+            android:id="@+id/profileImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_alignParentStart="true"
@@ -26,10 +26,10 @@
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
 
         <TextView
-            android:id="@+id/nameTextView_0"
+            android:id="@+id/nameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/profileImage_0"
+            android:layout_toEndOf="@id/profileImage"
             android:layout_alignParentTop="true"
             android:text="Ім'я Прізвище"
             android:textSize="30dp"

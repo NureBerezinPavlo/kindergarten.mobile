@@ -1,6 +1,7 @@
 package com.example.happytimeskindergarten.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.happytimeskindergarten.R;
 import com.example.happytimeskindergarten.databinding.ActivityMainBinding;
@@ -12,6 +13,10 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
+        super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 

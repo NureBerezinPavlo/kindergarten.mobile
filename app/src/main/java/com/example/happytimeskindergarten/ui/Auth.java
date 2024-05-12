@@ -2,7 +2,24 @@ package com.example.happytimeskindergarten.ui;
 
 public class Auth {
     SupportClass supportclass;
-    String token;
+    String token, id;
+    String[] family_account_id;
+
+    public String[] getFamily_account_id() {
+        return family_account_id;
+    }
+
+    public void setFamily_account_id(String[] family_account_id) {
+        this.family_account_id = family_account_id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getToken() {
         return token;
