@@ -30,7 +30,7 @@ public class family_accountData {
         private int[] child_profiles;
         private int[] trusted_persons;
         private Object image_data;
-        private Object phone;
+        private String phone;
 
         public int getFamily_account_id() {
             return family_account_id;
@@ -88,11 +88,11 @@ public class family_accountData {
             this.image_data = image_data;
         }
 
-        public Object getPhone() {
+        public String getPhone() {
             return phone;
         }
 
-        public void setPhone(Object phone) {
+        public void setPhone(String phone) {
             this.phone = phone;
         }
     }

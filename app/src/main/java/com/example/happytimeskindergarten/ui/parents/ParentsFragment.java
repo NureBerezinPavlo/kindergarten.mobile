@@ -37,7 +37,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
 {
     private ParentsViewModel mViewModel;
     ArrayList<Person> personsList = new ArrayList<Person>();
-
+    Person parent = new Person("Null", "Null", "Null");
     public static ParentsFragment newInstance() {
         return new ParentsFragment();
     }
@@ -57,7 +57,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
 
         // Заполнение динамического списка доверенных лиц
         // Содержимое списка чисто для проверки работоспособности, а так заполняем с сервера
-        Person parent = new Person("Ковальов Богдан Сергійович", "bogdan@gmail.com", "+380-666-14-88");
+
 
         // Заполняем recyclerView доверенными лицами
         UpdateRecyclerView();
@@ -108,7 +108,12 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
             public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
 
                 User.setFamily_account(response.body());
-                System.out.println(response.body().getData().getChild_profiles().length);
+                System.out.println(response.body().getData().getName() + response.body().getData().getEmail() + response.body().getData().getPhone());
+                parent = new Person(response.body().getData().getName(), response.body().getData().getEmail(), response.body().getData().getPhone());
+                View parentBlock = getActivity().findViewById(R.id.parentBlock);
+                ((TextView)parentBlock.findViewById(R.id.fullNameTextView)).setText(parent.fullName);
+                ((TextView)parentBlock.findViewById(R.id.emailTextView)).setText(parent.email);
+                ((TextView)parentBlock.findViewById(R.id.phoneNumberTextView)).setText(parent.phoneNumber);
                 personsList = new ArrayList<Person>();
                 for(int i = 0; i < response.body().getData().getTrusted_persons().length; i++){
                     Request.requestTrustedPerson.getTrustedPerson(String.valueOf(response.body().getData().getTrusted_persons()[i]), User.getToken()).enqueue(new Callback<TrustedPersonData>() {
