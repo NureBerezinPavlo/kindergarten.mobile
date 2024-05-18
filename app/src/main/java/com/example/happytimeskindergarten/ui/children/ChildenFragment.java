@@ -42,41 +42,10 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Request.requestfamily.getfamily(User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<family_accountData>() {
-            @Override
-            public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
 
-                User.setFamily_account(response.body());
-                System.out.println(response.body().getData().getChild_profiles().length);
-                for(int i = 0; i < response.body().getData().getChild_profiles().length; i++){
-                    Request.requestChildren.getChildrens(String.valueOf(response.body().getData().getChild_profiles()[i]), User.getToken()).enqueue(new Callback<ChildData>() {
-                        @Override
-                        public void onResponse(Call<ChildData> call1, Response<ChildData> response1) {
-                            childrenArrayList.add(new Child(response1.body().getData().getName(), response1.body().getData().getGender() == "male" ? Child.Gender.MALE : Child.Gender.FEMALE));
-                        }
-
-                        @Override
-                        public void onFailure(Call<ChildData> call1, Throwable t1) {
-
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onFailure(Call<family_accountData> call, Throwable t) {
-                Log.e("Error","Errror",t);
-                System.out.println("Error");
-            }
-        });
         return inflater.inflate(R.layout.fragment_childen, container, false);
     }
-    ArrayList<Child> childrenArrayList = new ArrayList<Child>()
-    {{
-        add(new Child("Петро", Child.Gender.MALE));
-        add(new Child("Марія", Child.Gender.FEMALE));
-        add(new Child("Олександр", Child.Gender.MALE));
-    }};
+    ArrayList<Child> childrenArrayList  = new ArrayList<Child>();
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         // вырубаем тёмную тему во всём приложении
@@ -97,7 +66,35 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
 
         childrenRecyclerView.setLayoutManager(layoutManager);
         childrenRecyclerView.setAdapter(adapter);
+        Request.requestfamily.getfamily(User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<family_accountData>() {
+            @Override
+            public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
 
+                User.setFamily_account(response.body());
+                System.out.println(response.body().getData().getChild_profiles().length);
+                childrenArrayList = new ArrayList<Child>();
+                for(int i = 0; i < response.body().getData().getChild_profiles().length; i++){
+                    Request.requestChildren.getChildrens(String.valueOf(response.body().getData().getChild_profiles()[i]), User.getToken()).enqueue(new Callback<ChildData>() {
+                        @Override
+                        public void onResponse(Call<ChildData> call1, Response<ChildData> response1) {
+                            childrenArrayList.add(new Child(response1.body().getData().getName(), response1.body().getData().getGender() == "male" ? Child.Gender.MALE : Child.Gender.FEMALE));
+                            adapter.loadChildren(childrenArrayList);
+                        }
+
+                        @Override
+                        public void onFailure(Call<ChildData> call1, Throwable t1) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<family_accountData> call, Throwable t) {
+                Log.e("Error","Errror",t);
+                System.out.println("Error");
+            }
+        });
         View signOutButton = getView().findViewById(R.id.signOutButton);
         signOutButton.setOnClickListener(new View.OnClickListener()
         {

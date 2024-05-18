@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.happytimeskindergarten.R;
+import com.example.happytimeskindergarten.ui.*;
 import com.example.happytimeskindergarten.ui.OnePersonEditActivity;
 import com.example.happytimeskindergarten.ui.Person;
 import com.example.happytimeskindergarten.ui.PersonEditWithoutDeletingActivity;
@@ -26,14 +29,14 @@ import com.example.happytimeskindergarten.ui.User;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ParentsFragment extends Fragment implements TrustedPersonAdapter.OnItemListener
 {
     private ParentsViewModel mViewModel;
-    ArrayList<Person> personsList = new ArrayList<Person>() {{
-        add(new Person("Березін Павло Павлович", "pberezin97@gmail.com", "+880-333-26-05"));
-        add(new Person("Лантінов Володимир", "lantiniff@gmail.com", "+8-800-555-35-35"));
-        add(new Person("Сахань Дмитро", "dimka@mail.com", "+333-696-96-96"));
-    }};
+    ArrayList<Person> personsList = new ArrayList<Person>();
 
     public static ParentsFragment newInstance() {
         return new ParentsFragment();
@@ -57,7 +60,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
         Person parent = new Person("Ковальов Богдан Сергійович", "bogdan@gmail.com", "+380-666-14-88");
 
         // Заполняем recyclerView доверенными лицами
-        UpdateRecyclerView(personsList);
+        UpdateRecyclerView();
 
         // Заполняем данные о родителе
         View parentBlock = getActivity().findViewById(R.id.parentBlock);
@@ -89,7 +92,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
             }
         });
     }
-    public void UpdateRecyclerView(ArrayList<Person> personsList)
+    public void UpdateRecyclerView()
     {
         RecyclerView trustedPersonsRecyclerView =
                 getActivity().findViewById(R.id.trustedPersonsRecyclerView);
@@ -100,6 +103,35 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
 
         trustedPersonsRecyclerView.setLayoutManager(layoutManager);
         trustedPersonsRecyclerView.setAdapter(adapter);
+        Request.requestfamily.getfamily(User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<family_accountData>() {
+            @Override
+            public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
+
+                User.setFamily_account(response.body());
+                System.out.println(response.body().getData().getChild_profiles().length);
+                personsList = new ArrayList<Person>();
+                for(int i = 0; i < response.body().getData().getTrusted_persons().length; i++){
+                    Request.requestTrustedPerson.getTrustedPerson(String.valueOf(response.body().getData().getTrusted_persons()[i]), User.getToken()).enqueue(new Callback<TrustedPersonData>() {
+                        @Override
+                        public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
+                            personsList.add(new Person(response.body().getData().getName(),response.body().getData().getEmail(), response.body().getData().getPhone()));
+                            adapter.loadTrustedPersons(personsList);
+                        }
+
+                        @Override
+                        public void onFailure(Call<TrustedPersonData> call, Throwable t) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<family_accountData> call, Throwable t) {
+                Log.e("Error","Errror",t);
+                System.out.println("Error");
+            }
+        });
     }
 
     @Override
@@ -113,7 +145,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
         if(temporaryPersonsList != null)
         {
             personsList = temporaryPersonsList;
-            UpdateRecyclerView(personsList);
+            UpdateRecyclerView();
         }
 
         Person parent = (Person)data.getSerializableExtra("parent");

@@ -16,6 +16,7 @@ public class Request {
     static public RequestFamily requestfamily = retrofit.create(RequestFamily.class);
     static public RequestString requeststring = retrofit.create(RequestString.class);
     static public RequestChildren requestChildren = retrofit.create(RequestChildren.class);
+    static public RequestTrustedPerson requestTrustedPerson = retrofit.create(RequestTrustedPerson.class);
 
 }
 

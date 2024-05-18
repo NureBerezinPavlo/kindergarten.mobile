@@ -64,4 +64,9 @@ public class TrustedPersonAdapter extends RecyclerView.Adapter<TrustedPersonView
     {
         void onItemClick(int position, String fullName, String email, String phoneNumber);
     }
+
+    public void loadTrustedPersons(ArrayList<Person> personsArraylist) {
+        this.personsArraylist = personsArraylist;
+        notifyDataSetChanged();
+    }
 }
