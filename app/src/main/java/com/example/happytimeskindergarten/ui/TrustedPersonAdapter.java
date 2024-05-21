@@ -3,6 +3,8 @@ package com.example.happytimeskindergarten.ui;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.happytimeskindergarten.R;
@@ -42,8 +44,7 @@ public class TrustedPersonAdapter extends RecyclerView.Adapter<TrustedPersonView
         ViewGroup.LayoutParams layoutParams = itsLayout.getLayoutParams();
         layoutParams.height = totalHeight;
 
-
-        return new TrustedPersonViewHolder(itsLayout, onItemListener);
+        return new TrustedPersonViewHolder(itsLayout, onItemListener, personsArraylist.get(viewType));
     }
     private int measureView(View view) {
         view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
@@ -52,9 +53,10 @@ public class TrustedPersonAdapter extends RecyclerView.Adapter<TrustedPersonView
     @Override
     public void onBindViewHolder(@NonNull TrustedPersonViewHolder holder, int i)
     {
-        holder.fullNameTextView.setText(personsArraylist.get(i).fullName);
-        holder.emailTextView.setText(personsArraylist.get(i).email);
-        holder.phoneNumberTextView.setText(personsArraylist.get(i).phoneNumber);
+        holder.person = personsArraylist.get(i);
+        holder.fullNameTextView.setText(personsArraylist.get(i).getFullName());
+        holder.emailTextView.setText(personsArraylist.get(i).getEmail());
+        holder.phoneNumberTextView.setText(personsArraylist.get(i).getPhoneNumber());
     }
 
     @Override
@@ -62,7 +64,7 @@ public class TrustedPersonAdapter extends RecyclerView.Adapter<TrustedPersonView
 
     public interface OnItemListener
     {
-        void onItemClick(int position, String fullName, String email, String phoneNumber);
+        void onItemClick(int position, Person person);
     }
 
     public void loadTrustedPersons(ArrayList<Person> personsArraylist) {

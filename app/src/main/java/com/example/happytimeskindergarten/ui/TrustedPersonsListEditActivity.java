@@ -3,19 +3,16 @@ package com.example.happytimeskindergarten.ui;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.happytimeskindergarten.R;
-
 import java.util.ArrayList;
 
 public class TrustedPersonsListEditActivity extends AppCompatActivity implements TrustedPersonAdapter.OnItemListener
 {
+    ArrayList<Person> trustedPersons;
     RecyclerView recyclerView;
     TrustedPersonAdapter adapter;
     View selectedPersonView;
@@ -56,6 +53,7 @@ public class TrustedPersonsListEditActivity extends AppCompatActivity implements
 
     public void UpdateRecyclerView(ArrayList<Person> persons)
     {
+        trustedPersons = persons;
         recyclerView = findViewById(R.id.trustedPersonsRecyclerView);
         RecyclerView.LayoutManager layoutManager =
                 new GridLayoutManager(getApplicationContext(), 1);
@@ -67,12 +65,12 @@ public class TrustedPersonsListEditActivity extends AppCompatActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 1) {
-            if (data == null || selectedPersonView == null) return;
+        if (data == null) return;
 
-            String full_name = data.getStringExtra("full_name");
-            String email = data.getStringExtra("email");
-            String phone_number = data.getStringExtra("phone_number");
+        if (requestCode == 1) {
+            if (selectedPersonView == null) return;
+
+            Person trustedPerson = (Person)data.getSerializableExtra(Person.class.getSimpleName());
 
             Boolean is_deleted = data.getBooleanExtra("is_deleted", false);
 
@@ -87,14 +85,14 @@ public class TrustedPersonsListEditActivity extends AppCompatActivity implements
             TextView emailTextView = selectedPersonView.findViewById(R.id.emailTextView);
             TextView phoneNumberTextView = selectedPersonView.findViewById(R.id.phoneNumberTextView);
 
-            fullNameTextView.setText(full_name);
-            emailTextView.setText(email);
-            phoneNumberTextView.setText(phone_number);
+            fullNameTextView.setText(trustedPerson.getFullName());
+            emailTextView.setText(trustedPerson.getEmail());
+            phoneNumberTextView.setText(trustedPerson.getPhoneNumber());
 
             ArrayList<Person> persons = ((TrustedPersonAdapter) recyclerView.getAdapter()).personsArraylist;
-            persons.get(selectedPersonIndex).fullName = full_name;
-            persons.get(selectedPersonIndex).email = email;
-            persons.get(selectedPersonIndex).phoneNumber = phone_number;
+            persons.get(selectedPersonIndex).setFullName(trustedPerson.getFullName());
+            persons.get(selectedPersonIndex).setEmail(trustedPerson.getEmail());
+            persons.get(selectedPersonIndex).setPhoneNumber(trustedPerson.getPhoneNumber());
         } else if (requestCode == 2) {
             Person person = (Person)data.getSerializableExtra("parent");
             adapter = (TrustedPersonAdapter) recyclerView.getAdapter();
@@ -109,16 +107,14 @@ public class TrustedPersonsListEditActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onItemClick(int position, String fullName, String email, String phoneNumber) {
+    public void onItemClick(int position, Person person) {
         selectedPersonView = ((TrustedPersonAdapter)recyclerView.getAdapter()).itsLayouts.get(position);
         selectedPersonIndex = position;
 
         //Toast.makeText(getApplicationContext(), fullName + "_" + email + "_" + phoneNumber, Toast.LENGTH_SHORT).show();
 
         Intent editIntent = new Intent(this, OnePersonEditActivity.class);
-        editIntent.putExtra("full_name", fullName);
-        editIntent.putExtra("email", email);
-        editIntent.putExtra("phone_number", phoneNumber);
+        editIntent.putExtra(Person.class.getSimpleName(), person);
 
         // передаём данные в интент через putExtra
         startActivityForResult(editIntent, 1);

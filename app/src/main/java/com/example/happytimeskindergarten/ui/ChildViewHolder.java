@@ -27,6 +27,6 @@ public class ChildViewHolder extends RecyclerView.ViewHolder implements View.OnC
     @Override
     public void onClick(View v)
     {
-        onItemListener.onItemClick(getAdapterPosition(), fullNameTextView.getText().toString(), child.gender);
+        onItemListener.onItemClick(getAdapterPosition(), child);
     }
 }

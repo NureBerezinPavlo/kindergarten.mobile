@@ -8,24 +8,23 @@ import com.example.happytimeskindergarten.R;
 
 public class TrustedPersonViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
 {
+    Person person;
     public final TextView fullNameTextView, emailTextView, phoneNumberTextView;
     private final TrustedPersonAdapter.OnItemListener onItemListener;
 
-    public TrustedPersonViewHolder(@NonNull View itemView, TrustedPersonAdapter.OnItemListener onItemListener) {
+    public TrustedPersonViewHolder(@NonNull View itemView, TrustedPersonAdapter.OnItemListener onItemListener, Person person) {
         super(itemView);
         fullNameTextView = itemView.findViewById(R.id.fullNameTextView);
         emailTextView = itemView.findViewById(R.id.emailTextView);
         phoneNumberTextView = itemView.findViewById(R.id.phoneNumberTextView);
         this.onItemListener = onItemListener;
+        this.person = person;
         itemView.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v)
     {
-        onItemListener.onItemClick(getAdapterPosition(),
-                (String)fullNameTextView.getText(),
-                (String)emailTextView.getText(),
-                (String)phoneNumberTextView.getText());
+        onItemListener.onItemClick(getAdapterPosition(), person);
     }
 }

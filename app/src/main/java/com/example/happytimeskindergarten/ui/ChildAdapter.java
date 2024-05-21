@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,12 +51,12 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildViewHolder>
     @Override
     public void onBindViewHolder(@NonNull ChildViewHolder holder, int i)
     {
-        holder.fullNameTextView.setText(childrenArraylist.get(i).fullName);
+        holder.fullNameTextView.setText(childrenArraylist.get(i).getFullName());
         holder.child = childrenArraylist.get(i);
 
         // !!! Здесь должна быть проверка, есть ли фото в базе данных.
         // Если фото нет, оставляем фото по умолчанию.
-        if(childrenArraylist.get(i).gender == Child.Gender.FEMALE)
+        if(childrenArraylist.get(i).getGender() == Child.Gender.FEMALE)
         {
             // Аватарка девочки по умолчанию
             Drawable drawable = ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.childphotodefault_female2);
@@ -67,7 +69,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildViewHolder>
 
     public interface OnItemListener
     {
-        void onItemClick(int position, String fullName, Child.Gender gender);
+        void onItemClick(int position, Child child);
     }
 
     public void loadChildren(ArrayList<Child> childrenArrayList) {

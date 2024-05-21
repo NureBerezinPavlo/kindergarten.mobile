@@ -16,11 +16,25 @@ public class TeachersActivity extends AppCompatActivity implements TeacherAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teachers);
 
-        ArrayList<Person> personsList = new ArrayList<Person>() {{
-            add(new Person("Рубаненко Марія", "mashaagent007@gmail.com", "+380-963-12-34"));
-            add(new Person("Бистрицька Настя", "kei_rin0@gmail.com", "+123-456-78-90"));
-            add(new Person("Голоха Нікіта", "nikitagoloha@mail.com", "++111-222-33-44"));
-        }};
+        ArrayList<Person> personsList = new ArrayList<Person>();
+
+        Person teacher1 = new Person();
+        teacher1.setFullName("Рубаненко Марія");
+        teacher1.setEmail("mashaagent007@gmail.com");
+        teacher1.setPhoneNumber("+380-963-12-34");
+        personsList.add(teacher1);
+
+        Person teacher2 = new Person();
+        teacher2.setFullName("Бистрицька Настя");
+        teacher2.setEmail("kei_rin0@gmail.com");
+        teacher2.setPhoneNumber("+123-456-78-90");
+        personsList.add(teacher2);
+
+        Person teacher3 = new Person();
+        teacher3.setFullName("Голоха Нікіта");
+        teacher3.setEmail("nikitagoloha@mail.com");
+        teacher3.setPhoneNumber("++111-222-33-44");
+        personsList.add(teacher3);
 
         RecyclerView allTeachersRecyclerView = findViewById(R.id.teachersRecyclerView);
         TeacherAdapter adapter = new TeacherAdapter(personsList, this);
@@ -39,7 +53,7 @@ public class TeachersActivity extends AppCompatActivity implements TeacherAdapte
     }
 
     @Override
-    public void onItemClick(int position, String fullName, String email, String phoneNumber)
+    public void onItemClick(int position, Person person)
     {
         // здесь можно указать, что будет, если пользователь нажмёт на элемент из recyclerView
     }

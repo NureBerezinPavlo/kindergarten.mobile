@@ -15,15 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 import com.example.happytimeskindergarten.ui.*;
-import com.example.happytimeskindergarten.ui.Child;
-import com.example.happytimeskindergarten.ui.ChildAdapter;
-import com.example.happytimeskindergarten.ui.ChildEditActivity;
 import com.example.happytimeskindergarten.R;
-import com.example.happytimeskindergarten.ui.SignInActivity;
-import com.example.happytimeskindergarten.ui.TrustedPersonAdapter;
 
 import java.util.ArrayList;
 
@@ -42,10 +35,9 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.fragment_childen, container, false);
     }
-    ArrayList<Child> childrenArrayList  = new ArrayList<Child>();
+    ArrayList<Child> childrenArrayList = new ArrayList<Child>();
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         // вырубаем тёмную тему во всём приложении
@@ -55,6 +47,25 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
         mViewModel = new ViewModelProvider(this).get(ChildenViewModel.class);
         // TODO: Use the ViewModel
 
+        childrenArrayList  = new ArrayList<Child>();
+        /////// Только ради проверки работоспособности! Потом удалить //////////
+        Child child1 = new Child();
+        child1.setFullName("Світлана Клеменко");
+        child1.setBirthday("21 березня 2020 р.");
+        child1.setGender(Child.Gender.FEMALE);
+        child1.setAllergies("(Нічого.)");
+        child1.setIllnesses("Застуда");
+        child1.setGroup_name("Funny Bees");
+        childrenArrayList.add(child1);
+        Child child2 = new Child();
+        child2.setFullName("Андрій Клеменко");
+        child2.setBirthday("4 квітня 2019 р.");
+        child2.setGender(Child.Gender.MALE);
+        child2.setAllergies("Арахіс, пилок");
+        child2.setIllnesses("(Нічого.)");
+        child2.setGroup_name("Rainbow Road");
+        childrenArrayList.add(child2);
+        /////////////////////////////////////////////////////////////////////////
 
 
         RecyclerView childrenRecyclerView =
@@ -66,7 +77,7 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
 
         childrenRecyclerView.setLayoutManager(layoutManager);
         childrenRecyclerView.setAdapter(adapter);
-        Request.requestfamily.getfamily(User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<family_accountData>() {
+        /*Request.requestfamily.getfamily(User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<family_accountData>() {
             @Override
             public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
 
@@ -77,7 +88,7 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
                     Request.requestChildren.getChildrens(String.valueOf(response.body().getData().getChild_profiles()[i]), User.getToken()).enqueue(new Callback<ChildData>() {
                         @Override
                         public void onResponse(Call<ChildData> call1, Response<ChildData> response1) {
-                            childrenArrayList.add(new Child(response1.body().getData().getName(), response1.body().getData().getGender() == "male" ? Child.Gender.MALE : Child.Gender.FEMALE));
+                            childrenArrayList.add(new Child(response1.body()));
                             adapter.loadChildren(childrenArrayList);
                         }
 
@@ -94,7 +105,7 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
                 Log.e("Error","Errror",t);
                 System.out.println("Error");
             }
-        });
+        });*/
         View signOutButton = getView().findViewById(R.id.signOutButton);
         signOutButton.setOnClickListener(new View.OnClickListener()
         {
@@ -107,12 +118,11 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
     }
 
     @Override
-    public void onItemClick(int position, String fullName, Child.Gender gender)
+    public void onItemClick(int position, Child child)
     {
         Intent childEditIntent = new Intent(getActivity(), ChildEditActivity.class);
-        childEditIntent.putExtra("full_name", fullName);
         //Toast.makeText(getContext(), "" + gender, Toast.LENGTH_SHORT).show();
-        childEditIntent.putExtra("gender", gender.toString());
+        childEditIntent.putExtra(Child.class.getSimpleName(), child);
         startActivity(childEditIntent);
     }
 }

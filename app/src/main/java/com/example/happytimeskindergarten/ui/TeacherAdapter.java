@@ -69,7 +69,7 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherViewHolder>
             }
         });
 
-        return new TeacherViewHolder(layout, onItemListener);
+        return new TeacherViewHolder(layout, onItemListener, personsArraylist.get(viewType));
     }
     private int measureView(View view) {
         view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
@@ -78,9 +78,9 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherViewHolder>
     @Override
     public void onBindViewHolder(@NonNull TeacherViewHolder holder, int i)
     {
-        holder.fullNameTextView.setText(personsArraylist.get(i).fullName);
-        holder.emailTextView.setText(personsArraylist.get(i).email);
-        holder.phoneNumberTextView.setText(personsArraylist.get(i).phoneNumber);
+        holder.fullNameTextView.setText(personsArraylist.get(i).getFullName());
+        holder.emailTextView.setText(personsArraylist.get(i).getEmail());
+        holder.phoneNumberTextView.setText(personsArraylist.get(i).getPhoneNumber());
     }
 
     @Override
@@ -88,6 +88,6 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherViewHolder>
 
     public interface OnItemListener
     {
-        void onItemClick(int position, String fullName, String email, String phoneNumber);
+        void onItemClick(int position, Person person);
     }
 }

@@ -19,10 +19,13 @@ import com.example.happytimeskindergarten.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
 
+import org.w3c.dom.Text;
+
 import java.time.LocalTime;
 
 public class ChildEditActivity extends AppCompatActivity {
 
+    Child child;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,18 +34,24 @@ public class ChildEditActivity extends AppCompatActivity {
         // Достаём переданные данные
         Bundle arguments = getIntent().getExtras();
         TextView fullNameTextView = findViewById(R.id.fullNameTextView);
-        fullNameTextView.setText(arguments.getString("full_name"));
-        Child.Gender gender = Child.Gender.valueOf(arguments.getString("gender"));
-
-        //Toast.makeText(getApplicationContext(), arguments.getString("gender"), Toast.LENGTH_SHORT).show();
-        String verbFormByGender = gender == Child.Gender.FEMALE? "Народилася" : "Народився";
-        String dateOfBirthString = verbFormByGender + " 1 січня 2020 року";
+        TextView groupNameTextView = findViewById(R.id.groupNameTextView);
         TextView dateOfBirthTextView = findViewById(R.id.dateOfBirthTextView);
+        TextView diseasesTextView = findViewById(R.id.diseasesText).findViewById(R.id.contentTextView);
+        TextView allergiesTextView = findViewById(R.id.allergiesText).findViewById(R.id.contentTextView);
+
+        child = (Child)arguments.getSerializable(Child.class.getSimpleName());
+
+        fullNameTextView.setText(child.getFullName());
+        String verbFormByGender = child.getGender() == Child.Gender.FEMALE? "Народилася " : "Народився ";
+        String dateOfBirthString = verbFormByGender + child.getBirthday();
         dateOfBirthTextView.setText(dateOfBirthString);
+        groupNameTextView.setText("Група: " + child.getGroup_name());
+        diseasesTextView.setText(child.getIllnesses());
+        allergiesTextView.setText(child.getAllergies());
 
         // аватарка
         ShapeableImageView profileImage = findViewById(R.id.profileImage);
-        if(gender == Child.Gender.FEMALE)
+        if(child.getGender() == Child.Gender.FEMALE)
         {
             Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.childphotodefault_female2);
             profileImage.setImageDrawable(drawable);
@@ -194,7 +203,44 @@ public class ChildEditActivity extends AppCompatActivity {
                     Button safeButton = dialogBinding.findViewById(R.id.safeButton);
                     safeButton.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
+                        public void onClick(View v)
+                        {
+                            View dialogBinding = getLayoutInflater().inflate(R.layout.comfirmation_dialog_block, null);
+                            Dialog myDialog = new Dialog(ChildEditActivity.this);
+                            myDialog.setContentView(dialogBinding);
+                            myDialog.setCancelable(true);
+
+                            if (myDialog.getWindow() != null) {
+                                myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            }
+                            myDialog.show();
+
+                            TextView messageTextView = myDialog.findViewById(R.id.messageTextView);
+                            messageTextView.setText("Чи дійсно підтверджуєте відсутність дитини?");
+
+                            FloatingActionButton closeButton = dialogBinding.findViewById(R.id.closeButton);
+                            closeButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    myDialog.cancel();
+                                }
+                            });
+
+                            Button yesButton = dialogBinding.findViewById(R.id.yesButton);
+                            yesButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // сохраняем где-то текст с причиной отсутствия (он в editText)
+                                    myDialog.cancel();
+                                }
+                            });
+                            Button noButton = dialogBinding.findViewById(R.id.noButton);
+                            noButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    myDialog.cancel();
+                                }
+                            });
                             // сохраняем где-то текст с причиной отсутствия (он в editText)
                             myDialog.cancel();
                         }

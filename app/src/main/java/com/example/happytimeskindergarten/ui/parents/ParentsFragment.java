@@ -9,8 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,26 +16,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.happytimeskindergarten.R;
-import com.example.happytimeskindergarten.ui.*;
 import com.example.happytimeskindergarten.ui.OnePersonEditActivity;
 import com.example.happytimeskindergarten.ui.Person;
 import com.example.happytimeskindergarten.ui.PersonEditWithoutDeletingActivity;
 import com.example.happytimeskindergarten.ui.TrustedPersonAdapter;
 import com.example.happytimeskindergarten.ui.TrustedPersonsListEditActivity;
-import com.example.happytimeskindergarten.ui.Request;
-import com.example.happytimeskindergarten.ui.User;
 
 import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ParentsFragment extends Fragment implements TrustedPersonAdapter.OnItemListener
 {
     private ParentsViewModel mViewModel;
-    ArrayList<Person> personsList = new ArrayList<Person>();
-    Person parent = new Person("Null", "Null", "Null");
+    Person parent;
+    ArrayList<Person> trustedPersonsList;
+
     public static ParentsFragment newInstance() {
         return new ParentsFragment();
     }
@@ -55,18 +47,46 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ParentsViewModel.class);
 
+        ////////////////////////////////////////////////////////////////////////////
         // Заполнение динамического списка доверенных лиц
         // Содержимое списка чисто для проверки работоспособности, а так заполняем с сервера
 
+        parent = new Person();
+        parent.setFullName("Ковальов Богдан Сергійович");
+        parent.setEmail("bogdan@gmail.com");
+        parent.setPhoneNumber("+380-666-14-88");
+
+
+        trustedPersonsList = new ArrayList<Person>();
+
+        Person person1 = new Person();
+        person1.setFullName("Березін Павло Павлович");
+        person1.setEmail("pberezin97@gmail.com");
+        person1.setPhoneNumber("+880-333-26-05");
+        trustedPersonsList.add(person1);
+
+        Person person2 = new Person();
+        person2.setFullName("Лантінов Володимир");
+        person2.setEmail("lantiniff@gmail.com");
+        person2.setPhoneNumber("+8-800-555-35-35");
+        trustedPersonsList.add(person2);
+
+        Person person3 = new Person();
+        person3.setFullName("Сахань Дмитро");
+        person3.setEmail("dimka@mail.com");
+        person3.setPhoneNumber("+333-696-96-96");
+        trustedPersonsList.add(person3);
+
+        ///////////////////////////////////////////////////////////////////////
 
         // Заполняем recyclerView доверенными лицами
-        UpdateRecyclerView();
+        UpdateRecyclerView(trustedPersonsList);
 
         // Заполняем данные о родителе
         View parentBlock = getActivity().findViewById(R.id.parentBlock);
-        ((TextView)parentBlock.findViewById(R.id.fullNameTextView)).setText(parent.fullName);
-        ((TextView)parentBlock.findViewById(R.id.emailTextView)).setText(parent.email);
-        ((TextView)parentBlock.findViewById(R.id.phoneNumberTextView)).setText(parent.phoneNumber);
+        ((TextView)parentBlock.findViewById(R.id.fullNameTextView)).setText(parent.getFullName());
+        ((TextView)parentBlock.findViewById(R.id.emailTextView)).setText(parent.getEmail());
+        ((TextView)parentBlock.findViewById(R.id.phoneNumberTextView)).setText(parent.getPhoneNumber());
 
         // кнопка редактирования родителя, на которого зареган семейный акк
         View parentEditButton = getView().findViewById(R.id.parentEditButton);
@@ -87,12 +107,12 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
             public void onClick(View view)
             {
                 Intent intent = new Intent(getActivity(), TrustedPersonsListEditActivity.class);
-                intent.putExtra("trusted_persons_list", personsList);
+                intent.putExtra("trusted_persons_list", trustedPersonsList);
                 startActivityForResult(intent, 2);
             }
         });
     }
-    public void UpdateRecyclerView()
+    public void UpdateRecyclerView(ArrayList<Person> personsList)
     {
         RecyclerView trustedPersonsRecyclerView =
                 getActivity().findViewById(R.id.trustedPersonsRecyclerView);
@@ -103,40 +123,6 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
 
         trustedPersonsRecyclerView.setLayoutManager(layoutManager);
         trustedPersonsRecyclerView.setAdapter(adapter);
-        Request.requestfamily.getfamily(User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<family_accountData>() {
-            @Override
-            public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
-
-                User.setFamily_account(response.body());
-                System.out.println(response.body().getData().getName() + response.body().getData().getEmail() + response.body().getData().getPhone());
-                parent = new Person(response.body().getData().getName(), response.body().getData().getEmail(), response.body().getData().getPhone());
-                View parentBlock = getActivity().findViewById(R.id.parentBlock);
-                ((TextView)parentBlock.findViewById(R.id.fullNameTextView)).setText(parent.fullName);
-                ((TextView)parentBlock.findViewById(R.id.emailTextView)).setText(parent.email);
-                ((TextView)parentBlock.findViewById(R.id.phoneNumberTextView)).setText(parent.phoneNumber);
-                personsList = new ArrayList<Person>();
-                for(int i = 0; i < response.body().getData().getTrusted_persons().length; i++){
-                    Request.requestTrustedPerson.getTrustedPerson(String.valueOf(response.body().getData().getTrusted_persons()[i]), User.getToken()).enqueue(new Callback<TrustedPersonData>() {
-                        @Override
-                        public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
-                            personsList.add(new Person(response.body().getData().getName(),response.body().getData().getEmail(), response.body().getData().getPhone()));
-                            adapter.loadTrustedPersons(personsList);
-                        }
-
-                        @Override
-                        public void onFailure(Call<TrustedPersonData> call, Throwable t) {
-
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onFailure(Call<family_accountData> call, Throwable t) {
-                Log.e("Error","Errror",t);
-                System.out.println("Error");
-            }
-        });
     }
 
     @Override
@@ -149,22 +135,23 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
         ArrayList<Person> temporaryPersonsList = (ArrayList<Person>) data.getSerializableExtra("persons_arraylist");
         if(temporaryPersonsList != null)
         {
-            personsList = temporaryPersonsList;
-            UpdateRecyclerView();
+            trustedPersonsList = temporaryPersonsList;
+            UpdateRecyclerView(trustedPersonsList);
         }
 
-        Person parent = (Person)data.getSerializableExtra("parent");
-        if(parent != null)
+        Person newParent = (Person)data.getSerializableExtra("parent");
+        if(newParent != null)
         {
+            parent = newParent;
             View parentBlock = getActivity().findViewById(R.id.parentBlock);
-            ((TextView)parentBlock.findViewById(R.id.fullNameTextView)).setText(parent.fullName);
-            ((TextView)parentBlock.findViewById(R.id.emailTextView)).setText(parent.email);
-            ((TextView)parentBlock.findViewById(R.id.phoneNumberTextView)).setText(parent.phoneNumber);
+            ((TextView)parentBlock.findViewById(R.id.fullNameTextView)).setText(parent.getFullName());
+            ((TextView)parentBlock.findViewById(R.id.emailTextView)).setText(parent.getEmail());
+            ((TextView)parentBlock.findViewById(R.id.phoneNumberTextView)).setText(parent.getPhoneNumber());
         }
     }
 
     @Override
-    public void onItemClick(int position, String fullName, String email, String phoneNumber) {
+    public void onItemClick(int position, Person person) {
         // здесь можно указать, что будет, если пользователь нажмёт на элемент из recyclerView
     }
 }
