@@ -177,7 +177,7 @@ public class ChildEditActivity extends AppCompatActivity {
         noticeOfAbsenceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentTime.getHour() < 10) {
+                if (currentTime.getHour() > 10) {
                     View dialogBinding = getLayoutInflater().inflate(R.layout.edit_text_dialog_window, null);
                     Dialog myDialog = new Dialog(ChildEditActivity.this);
                     myDialog.setContentView(dialogBinding);
@@ -205,44 +205,43 @@ public class ChildEditActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v)
                         {
-                            View dialogBinding = getLayoutInflater().inflate(R.layout.comfirmation_dialog_block, null);
-                            Dialog myDialog = new Dialog(ChildEditActivity.this);
-                            myDialog.setContentView(dialogBinding);
-                            myDialog.setCancelable(true);
+                            View confirmDialogBinding = getLayoutInflater().inflate(R.layout.comfirmation_dialog_block, null);
+                            Dialog confirmDialog = new Dialog(ChildEditActivity.this);
+                            confirmDialog.setContentView(confirmDialogBinding);
+                            confirmDialog.setCancelable(true);
 
-                            if (myDialog.getWindow() != null) {
-                                myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            if (confirmDialog.getWindow() != null) {
+                                confirmDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                             }
-                            myDialog.show();
+                            confirmDialog.show();
 
-                            TextView messageTextView = myDialog.findViewById(R.id.messageTextView);
+                            TextView messageTextView = confirmDialog.findViewById(R.id.messageTextView);
                             messageTextView.setText("Чи дійсно підтверджуєте відсутність дитини?");
 
-                            FloatingActionButton closeButton = dialogBinding.findViewById(R.id.closeButton);
+                            FloatingActionButton closeButton = confirmDialogBinding.findViewById(R.id.closeButton);
                             closeButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    myDialog.cancel();
+                                    confirmDialog.cancel();
                                 }
                             });
 
-                            Button yesButton = dialogBinding.findViewById(R.id.yesButton);
+                            Button yesButton = confirmDialogBinding.findViewById(R.id.yesButton);
                             yesButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     // сохраняем где-то текст с причиной отсутствия (он в editText)
+                                    confirmDialog.cancel();
                                     myDialog.cancel();
                                 }
                             });
-                            Button noButton = dialogBinding.findViewById(R.id.noButton);
+                            Button noButton = confirmDialogBinding.findViewById(R.id.noButton);
                             noButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    myDialog.cancel();
+                                    confirmDialog.cancel();
                                 }
                             });
-                            // сохраняем где-то текст с причиной отсутствия (он в editText)
-                            myDialog.cancel();
                         }
                     });
                 } else {
