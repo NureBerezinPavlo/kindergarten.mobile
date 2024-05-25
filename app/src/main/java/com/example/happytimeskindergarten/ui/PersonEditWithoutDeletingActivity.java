@@ -25,9 +25,12 @@ import java.io.Serializable;
 
 public class PersonEditWithoutDeletingActivity extends AppCompatActivity implements View.OnClickListener
 {
+    Person person;
     EditText fullNameEditText;
     EditText emailEditText;
     EditText phoneNumberEditText;
+
+
     private static final int PICK_IMAGE_REQUEST = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +63,7 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
         Bundle arguments = getIntent().getExtras();
         if (arguments == null) return;
 
-        Person person = (Person) arguments.getSerializable(Person.class.getSimpleName());
+        person = (Person) arguments.getSerializable(Person.class.getSimpleName());
 
         fullNameEditText.setText(person.getFullName());
         emailEditText.setText(person.getEmail());
@@ -81,8 +84,14 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
         }
     }
 
-    public static boolean isNullOrEmptyOrWhitespace(String str) {
-        return str == null || str.trim().isEmpty();
+    public static boolean AnyFieldContainsText(String... strs) {
+        if(strs == null) return false;
+
+        for (String str : strs) {
+            if (str != null && !str.trim().isEmpty())
+                return true;
+        }
+        return false;
     }
     @Override
     public void onBackPressed() {
@@ -90,8 +99,13 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
         String email = emailEditText.getText().toString();
         String phoneNumber = phoneNumberEditText.getText().toString();
 
-        if (!isNullOrEmptyOrWhitespace(fullName) || !isNullOrEmptyOrWhitespace(email)
-                || !isNullOrEmptyOrWhitespace(phoneNumber)) {
+        boolean openForCreating= AnyFieldContainsText(fullName, email, phoneNumber) && person == null;
+        boolean openForEditing = person != null &&
+                (!fullName.equals(person.getFullName()) ||
+                !email.equals(person.getEmail()) ||
+                !phoneNumber.equals(person.getPhoneNumber()));
+
+        if (openForCreating || openForEditing) {
             View dialogBinding = getLayoutInflater().inflate(R.layout.comfirmation_dialog_block, null);
             Dialog myDialog = new Dialog(PersonEditWithoutDeletingActivity.this);
             myDialog.setContentView(dialogBinding);
