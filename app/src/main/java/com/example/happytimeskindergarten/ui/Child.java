@@ -1,7 +1,6 @@
 package com.example.happytimeskindergarten.ui;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class Child implements Serializable {
     public enum Gender {
@@ -15,7 +14,7 @@ public class Child implements Serializable {
     private String allergies;
     private String illnesses;
     private String image_data;
-    private Integer group_id;
+    private int group_id;
     private String group_name;
     private int family_account_id;
 
@@ -74,11 +73,11 @@ public class Child implements Serializable {
         this.image_data = image_data;
     }
 
-    public Integer getGroup_id() {
+    public int getGroup_id() {
         return group_id;
     }
 
-    public void setGroup_id(Integer group_id) {
+    public void setGroup_id(int group_id) {
         this.group_id = group_id;
     }
 

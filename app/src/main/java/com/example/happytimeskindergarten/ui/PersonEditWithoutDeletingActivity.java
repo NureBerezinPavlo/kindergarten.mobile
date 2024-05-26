@@ -23,6 +23,10 @@ import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class PersonEditWithoutDeletingActivity extends AppCompatActivity implements View.OnClickListener
 {
     Person person;
@@ -152,6 +156,17 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
         person.setFullName(fullNameEditText.getText().toString());
         person.setEmail(emailEditText.getText().toString());
         person.setPhoneNumber(phoneNumberEditText.getText().toString());
+        Request.requestTrustedPerson.createTrustedPerson(fullNameEditText.getText().toString(),emailEditText.getText().toString(),phoneNumberEditText.getText().toString(),User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<TrustedPersonData>() {
+            @Override
+            public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<TrustedPersonData> call, Throwable t) {
+
+            }
+        });
         intent.putExtra("parent", person);
 
         setResult(RESULT_OK, intent);

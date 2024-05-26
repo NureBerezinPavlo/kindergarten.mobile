@@ -13,6 +13,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ScheduleActivity extends AppCompatActivity implements ClassItemAdapter.OnItemListener
 {
     private TextView monthYearText; // месяц, год
@@ -37,7 +41,7 @@ public class ScheduleActivity extends AppCompatActivity implements ClassItemAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
-
+        int groupid = getIntent().getIntExtra("groupid", -1);
         scheduleLinearLayout = findViewById(R.id.scheduleLinearLayout);
         numbersOfDaysLinearLayout = findViewById(R.id.numbersOfDaysLinearLayout);
         monthYearText = findViewById(R.id.monthYearTextView);
@@ -92,12 +96,62 @@ public class ScheduleActivity extends AppCompatActivity implements ClassItemAdap
         }};
 
         for (int i = 0; i < 7; i++) {
+            final int day = i;
             ClassItemAdapter adapter = new ClassItemAdapter(classesJaggedList.get(i)/*, this*/);
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 1);
 
             RecyclerView classesColumnRecyclerView = (RecyclerView) scheduleLinearLayout.getChildAt(i);
             classesColumnRecyclerView.setLayoutManager(layoutManager);
             classesColumnRecyclerView.setAdapter(adapter);
+            Request.requestLessons.getLessons(String.valueOf(groupid), User.getToken()).enqueue(new Callback<lessonsData>() {
+                @Override
+                public void onResponse(Call<lessonsData> call, Response<lessonsData> response) {
+                    ArrayList<ClassItem> lessons = new ArrayList<ClassItem>();
+                    switch(day){
+                        case 0:
+                            for(lessonsData.Data day: response.body().getMonday()){
+                                lessons.add(new ClassItem(day.getAction_name(), day.getStart_time(), day.getEnd_time()));
+                            }
+                            break;
+                        case 1:
+                            for(lessonsData.Data day: response.body().getTuesday()){
+                                lessons.add(new ClassItem(day.getAction_name(), day.getStart_time(), day.getEnd_time()));
+                            }
+                            break;
+                        case 2:
+                            for(lessonsData.Data day: response.body().getWednesday()){
+                                lessons.add(new ClassItem(day.getAction_name(), day.getStart_time(), day.getEnd_time()));
+                            }
+                            break;
+                        case 3:
+                            for(lessonsData.Data day: response.body().getThursday()){
+                                lessons.add(new ClassItem(day.getAction_name(), day.getStart_time(), day.getEnd_time()));
+                            }
+                            break;
+                        case 4:
+                            for(lessonsData.Data day: response.body().getFriday()){
+                                lessons.add(new ClassItem(day.getAction_name(), day.getStart_time(), day.getEnd_time()));
+                            }
+                            break;
+                        case 5:
+                            for(lessonsData.Data day: response.body().getSaturday()){
+                                lessons.add(new ClassItem(day.getAction_name(), day.getStart_time(), day.getEnd_time()));
+                            }
+                            break;
+                        case 6:
+                            for(lessonsData.Data day: response.body().getSunday()){
+                                lessons.add(new ClassItem(day.getAction_name(), day.getStart_time(), day.getEnd_time()));
+                            }
+                            break;
+                    }
+                    adapter.loadLessons(lessons);
+                }
+
+                @Override
+                public void onFailure(Call<lessonsData> call, Throwable t) {
+
+                }
+            });
         }
 
         View exitButton = findViewById(R.id.exitButton);

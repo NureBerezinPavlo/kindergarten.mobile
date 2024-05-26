@@ -48,24 +48,6 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
         // TODO: Use the ViewModel
 
         childrenArrayList  = new ArrayList<Child>();
-        /////// Только ради проверки работоспособности! Потом удалить //////////
-        Child child1 = new Child();
-        child1.setFullName("Світлана Клеменко");
-        child1.setBirthday("21 березня 2020 р.");
-        child1.setGender(Child.Gender.FEMALE);
-        child1.setAllergies("(Нічого.)");
-        child1.setIllnesses("Застуда");
-        child1.setGroup_name("Funny Bees");
-        childrenArrayList.add(child1);
-        Child child2 = new Child();
-        child2.setFullName("Андрій Клеменко");
-        child2.setBirthday("4 квітня 2019 р.");
-        child2.setGender(Child.Gender.MALE);
-        child2.setAllergies("Арахіс, пилок");
-        child2.setIllnesses("(Нічого.)");
-        child2.setGroup_name("Rainbow Road");
-        childrenArrayList.add(child2);
-        /////////////////////////////////////////////////////////////////////////
 
 
         RecyclerView childrenRecyclerView =
@@ -77,7 +59,7 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
 
         childrenRecyclerView.setLayoutManager(layoutManager);
         childrenRecyclerView.setAdapter(adapter);
-        /*Request.requestfamily.getfamily(User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<family_accountData>() {
+        Request.requestfamily.getfamily(User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<family_accountData>() {
             @Override
             public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
 
@@ -87,8 +69,17 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
                 for(int i = 0; i < response.body().getData().getChild_profiles().length; i++){
                     Request.requestChildren.getChildrens(String.valueOf(response.body().getData().getChild_profiles()[i]), User.getToken()).enqueue(new Callback<ChildData>() {
                         @Override
-                        public void onResponse(Call<ChildData> call1, Response<ChildData> response1) {
-                            childrenArrayList.add(new Child(response1.body()));
+                        public void onResponse(Call<ChildData> call, Response<ChildData> response) {
+                            Child child = new Child();
+                            child.setId(response.body().getData().getId());
+                            child.setFullName(response.body().getData().getName());
+                            child.setBirthday(response.body().getData().getBirthday());
+                            child.setGender(response.body().getData().getGender() == "male" ?  Child.Gender.MALE : Child.Gender.FEMALE);
+                            child.setAllergies(response.body().getData().getAllergies());
+                            child.setIllnesses(response.body().getData().getIllnesses());
+                            child.setGroup_name(response.body().getData().getGroup_name());
+                            child.setGroup_id(response.body().getData().getGroup_id());
+                            childrenArrayList.add(child);
                             adapter.loadChildren(childrenArrayList);
                         }
 
@@ -105,7 +96,7 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
                 Log.e("Error","Errror",t);
                 System.out.println("Error");
             }
-        });*/
+        });
         View signOutButton = getView().findViewById(R.id.signOutButton);
         signOutButton.setOnClickListener(new View.OnClickListener()
         {

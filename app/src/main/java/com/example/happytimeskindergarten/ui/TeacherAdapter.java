@@ -90,4 +90,9 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherViewHolder>
     {
         void onItemClick(int position, Person person);
     }
+
+    public void loadTeachers(ArrayList<Person> teachers){
+        this.personsArraylist = teachers;
+        notifyDataSetChanged();
+    }
 }

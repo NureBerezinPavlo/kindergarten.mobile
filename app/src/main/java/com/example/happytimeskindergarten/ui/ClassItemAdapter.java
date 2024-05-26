@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import com.example.happytimeskindergarten.R;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClassItemAdapter extends RecyclerView.Adapter<ClassViewHolder>
@@ -45,5 +47,10 @@ public class ClassItemAdapter extends RecyclerView.Adapter<ClassViewHolder>
     public interface OnItemListener
     {
         void onItemClick(int position, String subjectName, String timeFrom, String timeTo);
+    }
+
+    public void loadLessons(ArrayList<ClassItem> lessons){
+        this.classesArraylist = lessons;
+        notifyDataSetChanged();
     }
 }

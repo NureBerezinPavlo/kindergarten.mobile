@@ -21,7 +21,14 @@ import com.google.android.material.imageview.ShapeableImageView;
 
 import org.w3c.dom.Text;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ChildEditActivity extends AppCompatActivity {
 
@@ -99,6 +106,18 @@ public class ChildEditActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         allergiesTextView.setText(editText.getText());
+                        child.setAllergies(editText.getText().toString());
+                        Request.requestChildren.updateallergies(String.valueOf(child.getId()), User.getToken(), child.getFullName(), child.getGender() == Child.Gender.MALE ? "male" : "female", child.getBirthday(), String.valueOf(child.getFamily_account_id()),editText.getText().toString()).enqueue(new Callback<ChildData>() {
+                            @Override
+                            public void onResponse(Call<ChildData> call, Response<ChildData> response) {
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<ChildData> call, Throwable t) {
+
+                            }
+                        });
                         myDialog.cancel();
                     }
                 });
@@ -142,6 +161,18 @@ public class ChildEditActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         diseasesTextView.setText(editText.getText());
+                        child.setIllnesses(editText.getText().toString());
+                        Request.requestChildren.updateillnesses(String.valueOf(child.getId()), User.getToken(), child.getFullName(), child.getGender() == Child.Gender.MALE ? "male" : "female", child.getBirthday(), String.valueOf(child.getFamily_account_id()),editText.getText().toString()).enqueue(new Callback<ChildData>() {
+                            @Override
+                            public void onResponse(Call<ChildData> call, Response<ChildData> response) {
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<ChildData> call, Throwable t) {
+
+                            }
+                        });
                         myDialog.cancel();
                     }
                 });
@@ -154,6 +185,7 @@ public class ChildEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent teachersIntent = new Intent(ChildEditActivity.this, TeachersActivity.class);
+                teachersIntent.putExtra("childid", child.getId());
                 startActivity(teachersIntent);
             }
         });
@@ -164,6 +196,7 @@ public class ChildEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent scheduleIntent = new Intent(ChildEditActivity.this, ScheduleActivity.class);
+                scheduleIntent.putExtra("groupid", child.getGroup_id());
                 // передаём в интент данные из текущего активити
                 startActivity(scheduleIntent);
             }
@@ -175,6 +208,7 @@ public class ChildEditActivity extends AppCompatActivity {
 
         // Кнопка уведомления об отсутствии ребёнка
         noticeOfAbsenceButton.setOnClickListener(new View.OnClickListener() {
+            LocalDate date = LocalDate.now();
             @Override
             public void onClick(View v) {
                 if (currentTime.getHour() > 10) {
@@ -183,7 +217,7 @@ public class ChildEditActivity extends AppCompatActivity {
                     myDialog.setContentView(dialogBinding);
                     myDialog.setCancelable(true);
 
-                    //EditText editText = myDialog.findViewById(R.id.editText);
+                    EditText editText = myDialog.findViewById(R.id.editText);
                     TextView titleTextView = myDialog.findViewById(R.id.titleTextView);
                     titleTextView.setText("Вкажіть причину");
 
@@ -231,6 +265,18 @@ public class ChildEditActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(View v) {
                                     // сохраняем где-то текст с причиной отсутствия (он в editText)
+
+                                    Request.requestattendances.pushattendance(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), editText.getText().toString(), User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<attendancesData>() {
+                                        @Override
+                                        public void onResponse(Call<attendancesData> call, Response<attendancesData> response) {
+
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<attendancesData> call, Throwable t) {
+
+                                        }
+                                    });
                                     confirmDialog.cancel();
                                     myDialog.cancel();
                                 }

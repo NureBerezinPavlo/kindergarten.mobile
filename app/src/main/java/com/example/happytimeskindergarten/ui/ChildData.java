@@ -23,7 +23,7 @@ public class ChildData {
         private String illnesses;
         private String image_data;
         private List<Attendance> attendances;
-        private Integer group_id;
+        private int group_id;
         private String group_name;
         private int family_account_id;
 
@@ -91,11 +91,11 @@ public class ChildData {
             this.attendances = attendances;
         }
 
-        public Integer getGroup_id() {
+        public int getGroup_id() {
             return group_id;
         }
 
-        public void setGroup_id(Integer group_id) {
+        public void setGroup_id(int group_id) {
             this.group_id = group_id;
         }
 
