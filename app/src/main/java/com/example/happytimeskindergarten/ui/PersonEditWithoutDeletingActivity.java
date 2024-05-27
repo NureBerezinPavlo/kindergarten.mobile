@@ -34,13 +34,14 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
     EditText emailEditText;
     EditText phoneNumberEditText;
 
+    Boolean create;
 
     private static final int PICK_IMAGE_REQUEST = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_edit_without_deleting);
-
+        create = getIntent().getBooleanExtra("create", true);
         fullNameEditText = findViewById(R.id.fullNameEditText);
         emailEditText = findViewById(R.id.emailEditText);
         phoneNumberEditText = findViewById(R.id.phoneNumberEditText);
@@ -52,7 +53,6 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
                 startActivityForResult(intent, PICK_IMAGE_REQUEST);
             }
         });
-
         View exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,17 +156,32 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
         person.setFullName(fullNameEditText.getText().toString());
         person.setEmail(emailEditText.getText().toString());
         person.setPhoneNumber(phoneNumberEditText.getText().toString());
-        Request.requestTrustedPerson.createTrustedPerson(fullNameEditText.getText().toString(),emailEditText.getText().toString(),phoneNumberEditText.getText().toString(),User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<TrustedPersonData>() {
-            @Override
-            public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
+        if(create){
+            Request.requestTrustedPerson.createTrustedPerson(fullNameEditText.getText().toString(),emailEditText.getText().toString(),phoneNumberEditText.getText().toString(),User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<TrustedPersonData>() {
+                @Override
+                public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
 
-            }
+                }
 
-            @Override
-            public void onFailure(Call<TrustedPersonData> call, Throwable t) {
+                @Override
+                public void onFailure(Call<TrustedPersonData> call, Throwable t) {
 
-            }
-        });
+                }
+            });
+        }
+        else{
+            Request.requestTrustedPerson.updateTrustedPerson(String.valueOf(person.getId()),fullNameEditText.getText().toString(),emailEditText.getText().toString(),phoneNumberEditText.getText().toString(),User.getFamily_account_id()[0],User.getToken(),"PUT").enqueue(new Callback<TrustedPersonData>() {
+                @Override
+                public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<TrustedPersonData> call, Throwable t) {
+
+                }
+            });
+        }
         intent.putExtra("parent", person);
 
         setResult(RESULT_OK, intent);

@@ -77,6 +77,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
             {
                 Intent intent = new Intent(getActivity(), PersonEditWithoutDeletingActivity.class);
                 intent.putExtra(Person.class.getSimpleName(), parent);
+                intent.putExtra("create", false);
                 startActivityForResult(intent, 3);
             }
         });
@@ -111,6 +112,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
                 User.setFamily_account(response.body());
                 System.out.println(response.body().getData().getName() + response.body().getData().getEmail() + response.body().getData().getPhone());
                 parent = new Person();
+                parent.setId(response.body().getData().getUser_id());
                 parent.setFullName(response.body().getData().getName());
                 parent.setEmail(response.body().getData().getEmail());
                 parent.setPhoneNumber(response.body().getData().getPhone());
@@ -124,6 +126,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
                         @Override
                         public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
                             Person person = new Person();
+                            person.setId(response.body().getData().getId());
                             person.setFullName(response.body().getData().getName());
                             person.setEmail(response.body().getData().getEmail());
                             person.setPhoneNumber(response.body().getData().getPhone());

@@ -19,6 +19,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import java.io.IOException;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class OnePersonEditActivity extends AppCompatActivity implements View.OnClickListener
 {
     Person trustedPerson;
@@ -60,6 +64,17 @@ public class OnePersonEditActivity extends AppCompatActivity implements View.OnC
                 //Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 Intent intent = new Intent();
                 intent.putExtra("is_deleted", true);
+                Request.requestTrustedPerson.updateTrustedPerson(String.valueOf(trustedPerson.getId()),trustedPerson.getFullName(),trustedPerson.getEmail(),trustedPerson.getPhoneNumber(),User.getFamily_account_id()[0],User.getToken(),"DELETE").enqueue(new Callback<TrustedPersonData>() {
+                    @Override
+                    public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<TrustedPersonData> call, Throwable t) {
+
+                    }
+                });
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -150,7 +165,17 @@ public class OnePersonEditActivity extends AppCompatActivity implements View.OnC
         trustedPerson.setFullName(fullNameEditText.getText().toString());
         trustedPerson.setEmail(emailEditText.getText().toString());
         trustedPerson.setPhoneNumber(phoneNumberEditText.getText().toString());
+        Request.requestTrustedPerson.updateTrustedPerson(String.valueOf(trustedPerson.getId()),fullNameEditText.getText().toString(),emailEditText.getText().toString(),phoneNumberEditText.getText().toString(),User.getFamily_account_id()[0],User.getToken(),"PUT").enqueue(new Callback<TrustedPersonData>() {
+            @Override
+            public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
 
+            }
+
+            @Override
+            public void onFailure(Call<TrustedPersonData> call, Throwable t) {
+
+            }
+        });
         Intent intent = new Intent();
         intent.putExtra(Person.class.getSimpleName(), trustedPerson);
 
