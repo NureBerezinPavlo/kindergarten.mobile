@@ -107,7 +107,7 @@ public class ChildEditActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         allergiesTextView.setText(editText.getText());
                         child.setAllergies(editText.getText().toString());
-                        Request.requestChildren.updateallergies(String.valueOf(child.getId()), User.getToken(), child.getFullName(), child.getGender() == Child.Gender.MALE ? "male" : "female", child.getBirthday(), String.valueOf(child.getFamily_account_id()),editText.getText().toString()).enqueue(new Callback<ChildData>() {
+                        Request.requestChildren.updateallergies(String.valueOf(child.getId()), User.getToken(), child.getFullName(), child.getGender() == Child.Gender.MALE ? "male" : "female", child.getBirthday(), User.getFamily_account_id()[0],editText.getText().toString(), "PUT").enqueue(new Callback<ChildData>() {
                             @Override
                             public void onResponse(Call<ChildData> call, Response<ChildData> response) {
 
@@ -162,7 +162,7 @@ public class ChildEditActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         diseasesTextView.setText(editText.getText());
                         child.setIllnesses(editText.getText().toString());
-                        Request.requestChildren.updateillnesses(String.valueOf(child.getId()), User.getToken(), child.getFullName(), child.getGender() == Child.Gender.MALE ? "male" : "female", child.getBirthday(), String.valueOf(child.getFamily_account_id()),editText.getText().toString()).enqueue(new Callback<ChildData>() {
+                        Request.requestChildren.updateillnesses(String.valueOf(child.getId()), User.getToken(), child.getFullName(), child.getGender() == Child.Gender.MALE ? "male" : "female", child.getBirthday(), User.getFamily_account_id()[0],editText.getText().toString(), "PUT").enqueue(new Callback<ChildData>() {
                             @Override
                             public void onResponse(Call<ChildData> call, Response<ChildData> response) {
 
