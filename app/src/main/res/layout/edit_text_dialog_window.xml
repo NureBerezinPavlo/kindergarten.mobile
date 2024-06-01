@@ -60,7 +60,7 @@
                 android:layout_marginHorizontal="50dp"
                 android:layout_marginVertical="20dp"
                 android:textSize="20dp"
-                android:backgroundTint="@color/light_green"
+                android:backgroundTint="@color/green_light"
                 android:text="@string/dialog_icon_save_changes"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         app:borderWidth="0dp"
         android:layout_margin="10dp"
-        android:backgroundTint="@color/warning_color"
+        android:backgroundTint="@color/red_main"
         android:contentDescription="@string/app_name"
         android:src="@android:drawable/ic_delete"
         app:tint="@color/white"

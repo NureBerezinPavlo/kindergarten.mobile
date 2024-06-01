@@ -35,7 +35,7 @@
                 android:id="@+id/parentLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="25dp"
+                android:layout_marginHorizontal="15dp"
                 android:layout_marginTop="10dp"
                 android:minHeight="50dp"
                 android:orientation="vertical"
@@ -75,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/light_green"
+        android:backgroundTint="@color/green_light"
         android:contentDescription="@string/app_name"
         app:tint="@color/white"
         android:src="@drawable/pencil_edit_icon"
@@ -83,15 +83,16 @@
         app:layout_anchorGravity="top|right|end"
         app:maxImageSize="30dp" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/trustedPersonsEditButton"
+        android:id="@+id/addTrustedPersonButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/light_green"
+        android:backgroundTint="@color/green_light"
         android:contentDescription="@string/app_name"
         app:tint="@color/white"
-        android:src="@drawable/pencil_edit_icon"
+        android:src="@drawable/plus_icon"
         app:layout_anchor="@id/textViewTitle2"
         app:layout_anchorGravity="center|right|end"
-        app:maxImageSize="30dp" />
+        app:maxImageSize="30dp">
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

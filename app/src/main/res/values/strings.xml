@@ -7,7 +7,7 @@
     <string name="title_teachers">Педагоги</string>
     <string name="main_menu_title">Список дітей</string>
     <string name="child_data_title">Інформація про дитину</string>
-    <string name="sign_in_title">Увійти в свій обліковий запис</string>
+    <string name="sign_in_title">Увійти в обліковий запис</string>
     <string name="sign_up_title">Зареєструватися</string>
     <string name="attendance_title">Присутність на заняттях</string>
     <string name="button_attendance_filter_this_week">Тиждень</string>
@@ -22,7 +22,7 @@
     <string name="sunday">НД</string>
     <string name="allergies_title">Алергії</string>
     <string name="diseases_title">Хвороби</string>
-    <string name="email_sign_in_textfield">Імейл</string>
+    <string name="email_sign_in_textfield">Електронна адреса</string>
     <string name="password_sign_in_textfield">Пароль</string>
     <string name="sign_in_button">Увійти</string>
     <string name="feedback_title">Слідкуйте за новинами в соцмережах</string>

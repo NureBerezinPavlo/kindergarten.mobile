@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.happytimeskindergarten.R;
 import com.example.happytimeskindergarten.ui.*;
@@ -23,15 +22,20 @@ import retrofit2.*;
 import com.example.happytimeskindergarten.ui.Person;
 import com.example.happytimeskindergarten.ui.PersonEditWithoutDeletingActivity;
 import com.example.happytimeskindergarten.ui.TrustedPersonAdapter;
-import com.example.happytimeskindergarten.ui.TrustedPersonsListEditActivity;
 
 import java.util.ArrayList;
 
 public class ParentsFragment extends Fragment implements TrustedPersonAdapter.OnItemListener
 {
     private ParentsViewModel mViewModel;
-    Person parent;
+    RecyclerView recyclerView;
+    TrustedPersonAdapter adapter;
     ArrayList<Person> trustedPersonsList;
+    Person parent;
+    View selectedPersonView;
+    int selectedPersonIndex;
+
+
 
     public static ParentsFragment newInstance() {
         return new ParentsFragment();
@@ -50,15 +54,23 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ParentsViewModel.class);
 
+        recyclerView = getActivity().findViewById(R.id.trustedPersonsRecyclerView);
+        adapter = (TrustedPersonAdapter)recyclerView.getAdapter();
+
         ////////////////////////////////////////////////////////////////////////////
         // Заполнение динамического списка доверенных лиц
         // Содержимое списка чисто для проверки работоспособности, а так заполняем с сервера
 
         parent = new Person();
-
-
         trustedPersonsList = new ArrayList<Person>();
 
+        View addTrustedPersonButton = getActivity().findViewById(R.id.addTrustedPersonButton);
+        addTrustedPersonButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), PersonEditWithoutDeletingActivity.class);
+                startActivityForResult(intent, 2);
+            }
+        });
 
         // Заполняем recyclerView доверенными лицами
         UpdateRecyclerView(trustedPersonsList);
@@ -83,7 +95,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
         });
 
         // Кнопка редактирования доверенных лиц
-        View trustedPersonsEditButton = getView().findViewById(R.id.trustedPersonsEditButton);
+        /*View trustedPersonsEditButton = getView().findViewById(R.id.trustedPersonsEditButton);
         trustedPersonsEditButton.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)
@@ -92,7 +104,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
                 intent.putExtra("trusted_persons_list", trustedPersonsList);
                 startActivityForResult(intent, 2);
             }
-        });
+        });*/
     }
     public void UpdateRecyclerView(ArrayList<Person> personsList)
     {
@@ -157,6 +169,50 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
 
         if(data == null) return;
 
+        if (requestCode == 1) { // изменеие или удаление доверенного лица
+            if (selectedPersonView == null) return;
+
+            Person trustedPerson = (Person)data.getSerializableExtra(Person.class.getSimpleName());
+
+            Boolean is_deleted = data.getBooleanExtra("is_deleted", false);
+
+            if (is_deleted) {
+                TrustedPersonAdapter adapter = (TrustedPersonAdapter) recyclerView.getAdapter();
+                adapter.personsArraylist.remove(selectedPersonIndex);
+                UpdateRecyclerView(adapter.personsArraylist);
+                return;
+            }
+
+            TextView fullNameTextView = selectedPersonView.findViewById(R.id.fullNameTextView);
+            TextView emailTextView = selectedPersonView.findViewById(R.id.emailTextView);
+            TextView phoneNumberTextView = selectedPersonView.findViewById(R.id.phoneNumberTextView);
+
+            fullNameTextView.setText(trustedPerson.getFullName());
+            emailTextView.setText(trustedPerson.getEmail());
+            phoneNumberTextView.setText(trustedPerson.getPhoneNumber());
+
+            ArrayList<Person> persons = ((TrustedPersonAdapter) recyclerView.getAdapter()).personsArraylist;
+            persons.get(selectedPersonIndex).setFullName(trustedPerson.getFullName());
+            persons.get(selectedPersonIndex).setEmail(trustedPerson.getEmail());
+            persons.get(selectedPersonIndex).setPhoneNumber(trustedPerson.getPhoneNumber());
+        } else if (requestCode == 2) { // добавление доверенного лица
+            Person person = (Person)data.getSerializableExtra("parent");
+            adapter = (TrustedPersonAdapter) recyclerView.getAdapter();
+            adapter.personsArraylist.add(person);
+            UpdateRecyclerView(adapter.personsArraylist);
+        } else if(requestCode == 3) { // изменение родителя
+            Person newParent = (Person)data.getSerializableExtra("parent");
+            if(newParent != null)
+            {
+                parent = newParent;
+                View parentBlock = getActivity().findViewById(R.id.parentBlock);
+                ((TextView)parentBlock.findViewById(R.id.fullNameTextView)).setText(parent.getFullName());
+                ((TextView)parentBlock.findViewById(R.id.emailTextView)).setText(parent.getEmail());
+                ((TextView)parentBlock.findViewById(R.id.phoneNumberTextView)).setText(parent.getPhoneNumber());
+            }
+        }
+
+        /*if(requestCode == )
         ArrayList<Person> temporaryPersonsList = (ArrayList<Person>) data.getSerializableExtra("persons_arraylist");
         if(temporaryPersonsList != null)
         {
@@ -172,11 +228,21 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
             ((TextView)parentBlock.findViewById(R.id.fullNameTextView)).setText(parent.getFullName());
             ((TextView)parentBlock.findViewById(R.id.emailTextView)).setText(parent.getEmail());
             ((TextView)parentBlock.findViewById(R.id.phoneNumberTextView)).setText(parent.getPhoneNumber());
-        }
+        }*/
     }
 
     @Override
     public void onItemClick(int position, Person person) {
         // здесь можно указать, что будет, если пользователь нажмёт на элемент из recyclerView
+        selectedPersonView = ((TrustedPersonAdapter)recyclerView.getAdapter()).itsLayouts.get(position);
+        selectedPersonIndex = position;
+
+        //Toast.makeText(getApplicationContext(), fullName + "_" + email + "_" + phoneNumber, Toast.LENGTH_SHORT).show();
+
+        Intent editIntent = new Intent(getActivity(), OnePersonEditActivity.class);
+        editIntent.putExtra(Person.class.getSimpleName(), person);
+
+        // передаём данные в интент через putExtra
+        startActivityForResult(editIntent, 1);
     }
 }

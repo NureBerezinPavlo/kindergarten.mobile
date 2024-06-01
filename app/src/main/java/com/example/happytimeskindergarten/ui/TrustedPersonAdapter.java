@@ -37,12 +37,12 @@ public class TrustedPersonAdapter extends RecyclerView.Adapter<TrustedPersonView
         View emailTextView = itsLayout.findViewById(R.id.emailTextView);
         View phoneNumberTextView = itsLayout.findViewById(R.id.phoneNumberTextView);
 
-        int totalHeight = measureView(photoAndFullnameView)
+        /*int totalHeight = measureView(photoAndFullnameView)
                 + measureView(emailTextView)
                 + measureView(phoneNumberTextView);
 
         ViewGroup.LayoutParams layoutParams = itsLayout.getLayoutParams();
-        layoutParams.height = totalHeight;
+        layoutParams.height = totalHeight;*/
 
         return new TrustedPersonViewHolder(itsLayout, onItemListener, personsArraylist.get(viewType));
     }

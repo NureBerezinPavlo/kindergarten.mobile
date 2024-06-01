@@ -4,13 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="25dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
+        android:backgroundTint="@color/yellow_light_box"
+        android:background="@drawable/rounded_corners_diseases_list">
     <RelativeLayout
         android:id="@+id/childBlock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:padding="16dp"
-        android:background="@drawable/rounded_corners_diseases_list"
         app:cornerRadius="30dp">
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -37,4 +46,5 @@
             android:textColor="@color/gray"
             android:layout_marginStart="10dp" />
     </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.children.ChildenFragment"
-    android:background="@color/main_content_background">
+    android:background="@color/yellow_light_back">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -31,7 +31,6 @@
                     android:id="@+id/childrenRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="25dp"
                     android:layout_marginTop="20dp"
                     android:minHeight="50dp"
                     android:radius="12dp">
@@ -43,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:backgroundTint="@color/light_green"
+        android:backgroundTint="@color/green_light"
         android:contentDescription="@string/app_name"
         android:src="@drawable/sign_out_icon"
         app:borderWidth="0dp"

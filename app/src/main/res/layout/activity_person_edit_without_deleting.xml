@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.PersonEditWithoutDeletingActivity"
-    android:background="@color/main_content_background">
+    android:background="@color/yellow_light_back">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
                 android:layout_gravity="center"
                 android:padding="5dp"
                 app:strokeWidth="10dp"
-                app:strokeColor="@color/salad_green"
+                app:strokeColor="@color/transparent"
                 app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
                 android:src="@drawable/avatar_default"
                 android:layout_marginTop="20dp"
@@ -149,7 +149,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/light_green"
+        android:backgroundTint="@color/green_light"
         android:contentDescription="@string/app_name"
         android:src="@drawable/back_icon"
         app:borderWidth="0dp"
@@ -161,7 +161,7 @@
         android:id="@+id/changeAvatarButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/light_green"
+        android:backgroundTint="@color/green_light"
         android:contentDescription="@string/app_name"
         android:src="@drawable/camera_icon"
         app:borderWidth="0dp"
