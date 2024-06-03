@@ -22,6 +22,7 @@ import retrofit2.*;
 import com.example.happytimeskindergarten.ui.Person;
 import com.example.happytimeskindergarten.ui.PersonEditWithoutDeletingActivity;
 import com.example.happytimeskindergarten.ui.TrustedPersonAdapter;
+import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
 
@@ -81,6 +82,8 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
         ((TextView)parentBlock.findViewById(R.id.emailTextView)).setText(parent.getEmail());
         ((TextView)parentBlock.findViewById(R.id.phoneNumberTextView)).setText(parent.getPhoneNumber());
 
+
+
         // кнопка редактирования родителя, на которого зареган семейный акк
         View parentEditButton = getView().findViewById(R.id.parentEditButton);
         parentEditButton.setOnClickListener(new View.OnClickListener()
@@ -127,11 +130,13 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
                 parent.setId(response.body().getData().getUser_id());
                 parent.setFullName(response.body().getData().getName());
                 parent.setEmail(response.body().getData().getEmail());
+                parent.setImageData(response.body().getData().getImage_data());
                 parent.setPhoneNumber(response.body().getData().getPhone());
                 View parentBlock = getActivity().findViewById(R.id.parentBlock);
                 ((TextView)parentBlock.findViewById(R.id.fullNameTextView)).setText(parent.getFullName());
                 ((TextView)parentBlock.findViewById(R.id.emailTextView)).setText(parent.getEmail());
                 ((TextView)parentBlock.findViewById(R.id.phoneNumberTextView)).setText(parent.getPhoneNumber());
+                ((ShapeableImageView)parentBlock.findViewById(R.id.profileImage_0)).setImageBitmap(Base64image.decode_image(response.body().getData().getImage_data()));
                 trustedPersonsList = new ArrayList<Person>();
                 for(int i = 0; i < response.body().getData().getTrusted_persons().length; i++){
                     Request.requestTrustedPerson.getTrustedPerson(String.valueOf(response.body().getData().getTrusted_persons()[i]), User.getToken()).enqueue(new Callback<TrustedPersonData>() {
@@ -142,6 +147,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
                             person.setFullName(response.body().getData().getName());
                             person.setEmail(response.body().getData().getEmail());
                             person.setPhoneNumber(response.body().getData().getPhone());
+                            person.setImageData(response.body().getData().getImage_data());
                             trustedPersonsList.add(person);
                             adapter.loadTrustedPersons(trustedPersonsList);
                         }

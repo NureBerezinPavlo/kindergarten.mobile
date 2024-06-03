@@ -81,6 +81,32 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
             try {
                 ShapeableImageView imageView = findViewById(R.id.profileImage);
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                if (create){
+                    Request.requestTrustedPerson.updateTrustedPerson(String.valueOf(person.getId()),person.getFullName(),person.getEmail(),person.getPhoneNumber(),User.getFamily_account_id()[0],Base64image.encode_image(bitmap),User.getToken(),"PUT").enqueue(new Callback<TrustedPersonData>() {
+                        @Override
+                        public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<TrustedPersonData> call, Throwable t) {
+
+                        }
+                    });
+                }
+                else{
+                    Request.requestfamily.updateParent(User.getFamily_account_id()[0], User.getToken(),User.getId(),phoneNumberEditText.getText().toString(), Base64image.encode_image(bitmap)).enqueue(new Callback<family_accountData>() {
+                        @Override
+                        public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<family_accountData> call, Throwable t) {
+
+                        }
+                    });
+                }
                 imageView.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -170,14 +196,14 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
             });
         }
         else{
-            Request.requestTrustedPerson.updateTrustedPerson(String.valueOf(person.getId()),fullNameEditText.getText().toString(),emailEditText.getText().toString(),phoneNumberEditText.getText().toString(),User.getFamily_account_id()[0],User.getToken(),"PUT").enqueue(new Callback<TrustedPersonData>() {
+            Request.requestfamily.updateParent(User.getFamily_account_id()[0], User.getToken(),User.getId(),phoneNumberEditText.getText().toString(), person.getImageData()).enqueue(new Callback<family_accountData>() {
                 @Override
-                public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
+                public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
 
                 }
 
                 @Override
-                public void onFailure(Call<TrustedPersonData> call, Throwable t) {
+                public void onFailure(Call<family_accountData> call, Throwable t) {
 
                 }
             });

@@ -19,7 +19,7 @@ public class Request {
             .addInterceptor(logging)
             .build();
     static Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8000")
+            .baseUrl("https://8683-178-150-111-49.ngrok-free.app")
             .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setLenient().create()))
             .client(httpClient)
             .build();

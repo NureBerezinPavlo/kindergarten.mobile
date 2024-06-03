@@ -57,6 +57,9 @@ public class TrustedPersonAdapter extends RecyclerView.Adapter<TrustedPersonView
         holder.fullNameTextView.setText(personsArraylist.get(i).getFullName());
         holder.emailTextView.setText(personsArraylist.get(i).getEmail());
         holder.phoneNumberTextView.setText(personsArraylist.get(i).getPhoneNumber());
+        if(holder.person.getImageData() != null){
+            holder.avatar.setImageBitmap(Base64image.decode_image(holder.person.getImageData()));
+        }
     }
 
     @Override

@@ -22,7 +22,7 @@ public interface RequestTrustedPerson {
     @FormUrlEncoded
     @POST("api/trusted_persons/{id}")
     @Headers("Accept: application/json;charset=UTF-8")
-    Call<TrustedPersonData> updateTrustedPerson(@Path("id") String id,@Field("name") String name,@Field("email") String email,@Field("phone") String phone,@Field("family_account_id") String family_account_id,@Header("Authorization") String token, @Field("_method") String method);
+    Call<TrustedPersonData> updateTrustedPerson(@Path("id") String id,@Field("name") String name,@Field("email") String email,@Field("phone") String phone,@Field("family_account_id") String family_account_id,@Field("image_data") String image_data,@Header("Authorization") String token, @Field("_method") String method);
 
 
 }

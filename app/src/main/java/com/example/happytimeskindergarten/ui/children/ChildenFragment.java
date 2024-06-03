@@ -77,6 +77,7 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
                             child.setGender(response.body().getData().getGender() == "male" ?  Child.Gender.MALE : Child.Gender.FEMALE);
                             child.setAllergies(response.body().getData().getAllergies());
                             child.setIllnesses(response.body().getData().getIllnesses());
+                            child.setImage_data(response.body().getData().getImage_data());
                             child.setGroup_name(response.body().getData().getGroup_name());
                             child.setGroup_id(response.body().getData().getGroup_id());
                             childrenArrayList.add(child);

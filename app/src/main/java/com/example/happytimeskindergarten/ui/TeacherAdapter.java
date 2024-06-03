@@ -38,12 +38,12 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherViewHolder>
         TextView emailTextView = layout.findViewById(R.id.emailTextView);
         TextView phoneNumberTextView = layout.findViewById(R.id.phoneNumberTextView);
 
-        int totalHeight = measureView(photoAndFullnameView)
-                + measureView(emailTextView)
-                + measureView(phoneNumberTextView);
-
-        ViewGroup.LayoutParams layoutParams = layout.getLayoutParams();
-        layoutParams.height = totalHeight;
+//        int totalHeight = measureView(photoAndFullnameView)
+//                + measureView(emailTextView)
+//                + measureView(phoneNumberTextView);
+//
+//        ViewGroup.LayoutParams layoutParams = layout.getLayoutParams();
+//        layoutParams.height = totalHeight;
 
         // Копирование имейла и телефона в буфер обмена при нажатии на соответствующие TextView
         emailTextView.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +81,9 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherViewHolder>
         holder.fullNameTextView.setText(personsArraylist.get(i).getFullName());
         holder.emailTextView.setText(personsArraylist.get(i).getEmail());
         holder.phoneNumberTextView.setText(personsArraylist.get(i).getPhoneNumber());
+        if(personsArraylist.get(i).getImageData() != null){
+            holder.avatar.setImageBitmap(Base64image.decode_image(personsArraylist.get(i).getImageData()));
+        }
     }
 
     @Override

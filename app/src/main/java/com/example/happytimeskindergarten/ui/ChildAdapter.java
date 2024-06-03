@@ -53,15 +53,21 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildViewHolder>
     {
         holder.fullNameTextView.setText(childrenArraylist.get(i).getFullName());
         holder.child = childrenArraylist.get(i);
-
+        if (holder.child.getImage_data() != null){
+            System.out.println("image data" + holder.child.getImage_data());
+            holder.profileImage.setImageBitmap(Base64image.decode_image(childrenArraylist.get(i).getImage_data()));
+        }
+        else{
+            if(childrenArraylist.get(i).getGender() == Child.Gender.FEMALE)
+            {
+                // Аватарка девочки по умолчанию
+                Drawable drawable = ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.childphotodefault_female2);
+                holder.profileImage.setImageDrawable(drawable);
+            }
+        }
         // !!! Здесь должна быть проверка, есть ли фото в базе данных.
         // Если фото нет, оставляем фото по умолчанию.
-        if(childrenArraylist.get(i).getGender() == Child.Gender.FEMALE)
-        {
-            // Аватарка девочки по умолчанию
-            Drawable drawable = ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.childphotodefault_female2);
-            holder.profileImage.setImageDrawable(drawable);
-        }
+
     }
 
     @Override

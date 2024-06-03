@@ -27,19 +27,19 @@ public class TeachersActivity extends AppCompatActivity implements TeacherAdapte
         teacher1.setFullName("Рубаненко Марія");
         teacher1.setEmail("mashaagent007@gmail.com");
         teacher1.setPhoneNumber("+380-963-12-34");
-        personsList.add(teacher1);
+        //personsList.add(teacher1);
 
         Person teacher2 = new Person();
         teacher2.setFullName("Бистрицька Настя");
         teacher2.setEmail("kei_rin0@gmail.com");
         teacher2.setPhoneNumber("+123-456-78-90");
-        personsList.add(teacher2);
+        //personsList.add(teacher2);
 
         Person teacher3 = new Person();
         teacher3.setFullName("Голоха Нікіта");
         teacher3.setEmail("nikitagoloha@mail.com");
         teacher3.setPhoneNumber("++111-222-33-44");
-        personsList.add(teacher3);
+        //personsList.add(teacher3);
 
         RecyclerView allTeachersRecyclerView = findViewById(R.id.teachersRecyclerView);
         TeacherAdapter adapter = new TeacherAdapter(personsList, this);

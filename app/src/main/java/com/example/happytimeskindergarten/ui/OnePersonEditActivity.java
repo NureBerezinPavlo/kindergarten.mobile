@@ -64,7 +64,7 @@ public class OnePersonEditActivity extends AppCompatActivity implements View.OnC
                 //Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 Intent intent = new Intent();
                 intent.putExtra("is_deleted", true);
-                Request.requestTrustedPerson.updateTrustedPerson(String.valueOf(trustedPerson.getId()),trustedPerson.getFullName(),trustedPerson.getEmail(),trustedPerson.getPhoneNumber(),User.getFamily_account_id()[0],User.getToken(),"DELETE").enqueue(new Callback<TrustedPersonData>() {
+                Request.requestTrustedPerson.updateTrustedPerson(String.valueOf(trustedPerson.getId()),trustedPerson.getFullName(),trustedPerson.getEmail(),trustedPerson.getPhoneNumber(),User.getFamily_account_id()[0],trustedPerson.getImageData(),User.getToken(),"DELETE").enqueue(new Callback<TrustedPersonData>() {
                     @Override
                     public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
 
@@ -103,6 +103,17 @@ public class OnePersonEditActivity extends AppCompatActivity implements View.OnC
             try {
                 ShapeableImageView imageView = findViewById(R.id.profileImage);
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                Request.requestTrustedPerson.updateTrustedPerson(String.valueOf(trustedPerson.getId()),trustedPerson.getFullName(),trustedPerson.getEmail(),trustedPerson.getPhoneNumber(),User.getFamily_account_id()[0],Base64image.encode_image(bitmap),User.getToken(),"PUT").enqueue(new Callback<TrustedPersonData>() {
+                    @Override
+                    public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<TrustedPersonData> call, Throwable t) {
+
+                    }
+                });
                 imageView.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -165,7 +176,7 @@ public class OnePersonEditActivity extends AppCompatActivity implements View.OnC
         trustedPerson.setFullName(fullNameEditText.getText().toString());
         trustedPerson.setEmail(emailEditText.getText().toString());
         trustedPerson.setPhoneNumber(phoneNumberEditText.getText().toString());
-        Request.requestTrustedPerson.updateTrustedPerson(String.valueOf(trustedPerson.getId()),fullNameEditText.getText().toString(),emailEditText.getText().toString(),phoneNumberEditText.getText().toString(),User.getFamily_account_id()[0],User.getToken(),"PUT").enqueue(new Callback<TrustedPersonData>() {
+        Request.requestTrustedPerson.updateTrustedPerson(String.valueOf(trustedPerson.getId()),fullNameEditText.getText().toString(),emailEditText.getText().toString(),phoneNumberEditText.getText().toString(),User.getFamily_account_id()[0],trustedPerson.getImageData(),User.getToken(),"PUT").enqueue(new Callback<TrustedPersonData>() {
             @Override
             public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
 

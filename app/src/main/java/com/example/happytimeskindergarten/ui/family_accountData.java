@@ -29,7 +29,7 @@ public class family_accountData {
         private String email;
         private int[] child_profiles;
         private int[] trusted_persons;
-        private Object image_data;
+        private String image_data;
         private String phone;
 
         public int getFamily_account_id() {
@@ -80,11 +80,11 @@ public class family_accountData {
             this.trusted_persons = trusted_persons;
         }
 
-        public Object getImage_data() {
+        public String getImage_data() {
             return image_data;
         }
 
-        public void setImage_data(Object image_data) {
+        public void setImage_data(String image_data) {
             this.image_data = image_data;
         }
 
