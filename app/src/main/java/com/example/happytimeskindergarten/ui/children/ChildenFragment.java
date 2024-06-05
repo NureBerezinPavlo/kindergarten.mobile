@@ -3,7 +3,10 @@ package com.example.happytimeskindergarten.ui.children;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.View;
 import android.os.Bundle;
@@ -15,8 +18,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
 import com.example.happytimeskindergarten.ui.*;
 import com.example.happytimeskindergarten.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -27,6 +34,9 @@ import retrofit2.Response;
 public class ChildenFragment extends Fragment implements ChildAdapter.OnItemListener {
 
     private ChildenViewModel mViewModel;
+    private RecyclerView childrenRecyclerView;
+    private int selectedChildId;
+
 
     public static ChildenFragment newInstance() {
         return new ChildenFragment();
@@ -37,7 +47,9 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_childen, container, false);
     }
+
     ArrayList<Child> childrenArrayList = new ArrayList<Child>();
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         // вырубаем тёмную тему во всём приложении
@@ -47,11 +59,10 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
         mViewModel = new ViewModelProvider(this).get(ChildenViewModel.class);
         // TODO: Use the ViewModel
 
-        childrenArrayList  = new ArrayList<Child>();
+        childrenArrayList = new ArrayList<Child>();
 
 
-        RecyclerView childrenRecyclerView =
-                getActivity().findViewById(R.id.childrenRecyclerView);
+        childrenRecyclerView = getActivity().findViewById(R.id.childrenRecyclerView);
 
         ChildAdapter adapter = new ChildAdapter(childrenArrayList, this);
         RecyclerView.LayoutManager layoutManager =
@@ -66,7 +77,7 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
                 User.setFamily_account(response.body());
                 System.out.println(response.body().getData().getChild_profiles().length);
                 childrenArrayList = new ArrayList<Child>();
-                for(int i = 0; i < response.body().getData().getChild_profiles().length; i++){
+                for (int i = 0; i < response.body().getData().getChild_profiles().length; i++) {
                     Request.requestChildren.getChildrens(String.valueOf(response.body().getData().getChild_profiles()[i]), User.getToken()).enqueue(new Callback<ChildData>() {
                         @Override
                         public void onResponse(Call<ChildData> call, Response<ChildData> response) {
@@ -74,7 +85,7 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
                             child.setId(response.body().getData().getId());
                             child.setFullName(response.body().getData().getName());
                             child.setBirthday(response.body().getData().getBirthday());
-                            child.setGender(response.body().getData().getGender() == "male" ?  Child.Gender.MALE : Child.Gender.FEMALE);
+                            child.setGender(response.body().getData().getGender() == "male" ? Child.Gender.MALE : Child.Gender.FEMALE);
                             child.setAllergies(response.body().getData().getAllergies());
                             child.setIllnesses(response.body().getData().getIllnesses());
                             child.setImage_data(response.body().getData().getImage_data());
@@ -94,13 +105,12 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
 
             @Override
             public void onFailure(Call<family_accountData> call, Throwable t) {
-                Log.e("Error","Errror",t);
+                Log.e("Error", "Errror", t);
                 System.out.println("Error");
             }
         });
         View signOutButton = getView().findViewById(R.id.signOutButton);
-        signOutButton.setOnClickListener(new View.OnClickListener()
-        {
+        signOutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), SignInActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -110,11 +120,28 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
     }
 
     @Override
-    public void onItemClick(int position, Child child)
-    {
+    public void onItemClick(int position, Child child) {
+        selectedChildId = position;
         Intent childEditIntent = new Intent(getActivity(), ChildEditActivity.class);
         //Toast.makeText(getContext(), "" + gender, Toast.LENGTH_SHORT).show();
         childEditIntent.putExtra(Child.class.getSimpleName(), child);
-        startActivity(childEditIntent);
+        startActivityForResult(childEditIntent, 1);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null || selectedChildId == -1) return;
+
+        Child child = (Child) data.getSerializableExtra(Child.class.getSimpleName());
+
+        childrenArrayList.set(selectedChildId, child);
+
+        ChildAdapter adapter = new ChildAdapter(childrenArrayList, this);
+        RecyclerView.LayoutManager layoutManager =
+                new GridLayoutManager(requireContext(), 1);
+        childrenRecyclerView.setLayoutManager(layoutManager);
+        childrenRecyclerView.setAdapter(adapter);
     }
 }
