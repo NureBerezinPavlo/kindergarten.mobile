@@ -144,10 +144,7 @@ public class ChildenFragment extends Fragment implements ChildAdapter.OnItemList
     {
         super.onActivityResult(requestCode, resultCode, data);
         if (selectedChildId == -1) return;
-
-        Child child = (Child) data.getSerializableExtra(Child.class.getSimpleName());
-
-        childrenArrayList.set(selectedChildId, child);
+        childrenArrayList = new ArrayList<Child>();
         UpdateRecyclerView();
     }
 
