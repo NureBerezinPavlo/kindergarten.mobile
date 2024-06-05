@@ -18,5 +18,11 @@ public interface RequestFamily {
     @FormUrlEncoded
     @POST("api/family_accounts/{id}")
     @Headers("Accept: application/json;charset=UTF-8")
-    Call<family_accountData> updateParent(@Path("id") String id, @Header("Authorization") String token, @Field("user_id") String user_id, @Field("phone_number") String phone, @Field("image") String image, @Field("_method") String method);
+    Call<family_accountData> updateParentPhone(@Path("id") String id, @Header("Authorization") String token, @Field("user_id") String user_id, @Field("phone_number") String phone, @Field("_method") String method);
+
+
+    @FormUrlEncoded
+    @POST("api/family_accounts/{id}")
+    @Headers("Accept: application/json;charset=UTF-8")
+    Call<family_accountData> updateParentImage(@Path("id") String id, @Header("Authorization") String token, @Field("user_id") String user_id, @Field("image") String image, @Field("_method") String method);
 }

@@ -112,7 +112,7 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
                     person.setImageData(Base64image.encode_image(bitmap));
                 }
                 else{
-                    Request.requestfamily.updateParent(User.getFamily_account_id()[0], User.getToken(),String.valueOf(person.getId()),phoneNumberEditText.getText().toString(), Base64image.encode_image(bitmap), "PUT").enqueue(new Callback<family_accountData>() {
+                    Request.requestfamily.updateParentImage(User.getFamily_account_id()[0], User.getToken(),String.valueOf(person.getId()),Base64image.encode_image(bitmap), "PUT").enqueue(new Callback<family_accountData>() {
                         @Override
                         public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
 
@@ -213,7 +213,7 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
             });
         }
         else{
-            Request.requestfamily.updateParent(User.getFamily_account_id()[0], User.getToken(),String.valueOf(person.getId()),phoneNumberEditText.getText().toString(), person.getImageData(),"PUT").enqueue(new Callback<family_accountData>() {
+            Request.requestfamily.updateParentPhone(User.getFamily_account_id()[0], User.getToken(),String.valueOf(person.getId()),phoneNumberEditText.getText().toString(),"PUT").enqueue(new Callback<family_accountData>() {
                 @Override
                 public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
 

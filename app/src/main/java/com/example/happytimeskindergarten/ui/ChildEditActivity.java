@@ -65,18 +65,17 @@ public class ChildEditActivity extends AppCompatActivity {
 
         // аватарка
         ShapeableImageView profileImage = findViewById(R.id.profileImage);
-        if(child.getGender() == Child.Gender.FEMALE)
-        {
-            Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.childphotodefault_female2);
-            profileImage.setImageDrawable(drawable);
+        if(child.getImage_data() != null){
+            profileImage.setImageBitmap(Base64image.decode_image(child.getImage_data()));
         }
+
 
         // Кнопка перехода обратно в главное меню с детьми
         View exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                finish();
             }
         });
 
@@ -335,7 +334,7 @@ public class ChildEditActivity extends AppCompatActivity {
 
                    }
                });
-               imageView.setImageBitmap(Base64image.decode_image(Base64image.encode_image(bitmap)));
+               imageView.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
