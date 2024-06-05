@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -323,22 +324,18 @@ public class ChildEditActivity extends AppCompatActivity {
                 // Этот коммент потом сотрёшь.
                 // И не забудь изменить фотку для child (поле в самом верху)
 
-                /*
-                Request.requestTrustedPerson.updateTrustedPerson(String.valueOf(trustedPerson.getId()),
-                        trustedPerson.getFullName(),trustedPerson.getEmail(),trustedPerson.getPhoneNumber(),
-                        User.getFamily_account_id()[0],Base64image.encode_image(bitmap),User.getToken(),
-                        "PUT").enqueue(new Callback<TrustedPersonData>() {
-                    @Override
-                    public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
+               Request.requestChildren.updateimage(String.valueOf(child.getId()), User.getToken(), child.getFullName(), child.getGender() == Child.Gender.MALE ? "male" : "female", child.getBirthday(), User.getFamily_account_id()[0], Base64image.encode_image(bitmap), "PUT" ).enqueue(new Callback<ChildData>() {
+                   @Override
+                   public void onResponse(Call<ChildData> call, Response<ChildData> response) {
 
-                    }
+                   }
 
-                    @Override
-                    public void onFailure(Call<TrustedPersonData> call, Throwable t) {
+                   @Override
+                   public void onFailure(Call<ChildData> call, Throwable t) {
 
-                    }
-                });*/
-                imageView.setImageBitmap(bitmap);
+                   }
+               });
+               imageView.setImageBitmap(Base64image.decode_image(Base64image.encode_image(bitmap)));
             } catch (IOException e) {
                 e.printStackTrace();
             }

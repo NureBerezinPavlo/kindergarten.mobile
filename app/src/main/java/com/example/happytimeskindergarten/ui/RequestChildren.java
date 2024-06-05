@@ -21,4 +21,9 @@ public interface RequestChildren {
     @POST("api/child_profiles/{id}")
     @Headers("Accept: application/json;charset=UTF-8")
     Call<ChildData> updateillnesses(@Path("id") String id, @Header("Authorization") String token, @Field("name") String name, @Field("gender") String gender, @Field("birthday") String birthday, @Field("family_account_id") String family_account_id, @Field("illnesses") String illnesses, @Field("_method") String method);
+
+    @FormUrlEncoded
+    @POST("api/child_profiles/{id}")
+    @Headers("Accept: application/json;charset=UTF-8")
+    Call<ChildData> updateimage(@Path("id") String id, @Header("Authorization") String token, @Field("name") String name, @Field("gender") String gender, @Field("birthday") String birthday, @Field("family_account_id") String family_account_id, @Field("image") String image, @Field("_method") String method);
 }

@@ -65,35 +65,7 @@ public class ScheduleActivity extends AppCompatActivity implements ClassItemAdap
 
         monthYearText.setText(MonthYearFromDate());
 
-        List<List<ClassItem>> classesJaggedList = new ArrayList<List<ClassItem>>() {{
-            add(new ArrayList<ClassItem>() {{
-                add(new ClassItem("Математика", "10:00", "10:30"));
-                add(new ClassItem("Литература", "10:50", "11:20"));
-            }});
-            add(new ArrayList<ClassItem>() {{
-                add(new ClassItem("Физика", "12:00", "13:00"));
-                add(new ClassItem("Математика", "13:20", "13:50"));
-                add(new ClassItem("Математика", "14:10", "15:00"));
-            }});
-            add(new ArrayList<ClassItem>() {{
-                add(new ClassItem("Биология", "8:25", "5:30"));
-            }});
-            add(new ArrayList<ClassItem>() {{
-                add(new ClassItem("Музыка", "00:00", "00:00"));
-                add(new ClassItem("Английский", "00:15", "5:55"));
-                add(new ClassItem("Информатика", "6:10", "8:10"));
-                add(new ClassItem("История", "10:30", "15:16"));
-            }});
-            add(new ArrayList<ClassItem>() {
-            });
-            add(new ArrayList<ClassItem>() {{
-                add(new ClassItem("Физика", "17:18", "19:20"));
-            }});
-            add(new ArrayList<ClassItem>() {{
-                add(new ClassItem("География", "13:10", "13:09"));
-                add(new ClassItem("Литература", "69:69", "2:28"));
-            }});
-        }};
+        List<List<ClassItem>> classesJaggedList = new ArrayList<List<ClassItem>>();
 
         for (int i = 0; i < 7; i++) {
             final int day = i;
