@@ -69,18 +69,13 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
         addTrustedPersonButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), PersonEditWithoutDeletingActivity.class);
+                intent.putExtra(Person.class.getSimpleName(), parent);
                 startActivityForResult(intent, 2);
             }
         });
 
         // Заполняем recyclerView доверенными лицами
         UpdateRecyclerView(trustedPersonsList);
-
-        // Заполняем данные о родителе
-        View parentBlock = getActivity().findViewById(R.id.parentBlock);
-        ((TextView)parentBlock.findViewById(R.id.fullNameTextView)).setText(parent.getFullName());
-        ((TextView)parentBlock.findViewById(R.id.emailTextView)).setText(parent.getEmail());
-        ((TextView)parentBlock.findViewById(R.id.phoneNumberTextView)).setText(parent.getPhoneNumber());
 
 
 
@@ -109,39 +104,75 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
             }
         });*/
     }
-    public void UpdateRecyclerView(ArrayList<Person> personsList)
-    {
-        RecyclerView trustedPersonsRecyclerView =
-                getActivity().findViewById(R.id.trustedPersonsRecyclerView);
+    public void UpdateRecyclerView(ArrayList<Person> personsList) {
+        // Получаем RecyclerView и проверяем его на null
+        RecyclerView trustedPersonsRecyclerView = getActivity().findViewById(R.id.trustedPersonsRecyclerView);
+        if (trustedPersonsRecyclerView == null) {
+            Log.e("ParentsFragment", "trustedPersonsRecyclerView is null");
+            return;
+        }
 
+        // Создаем адаптер и LayoutManager для RecyclerView
         TrustedPersonAdapter adapter = new TrustedPersonAdapter(personsList, this);
-        RecyclerView.LayoutManager layoutManager =
-                new GridLayoutManager(requireContext(), 1);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(requireContext(), 1);
 
+        // Устанавливаем LayoutManager и адаптер для RecyclerView
         trustedPersonsRecyclerView.setLayoutManager(layoutManager);
         trustedPersonsRecyclerView.setAdapter(adapter);
-        Request.requestfamily.getfamily(User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<family_accountData>() {
+
+        // Получаем family_account_id и токен пользователя
+        String familyAccountId = User.getFamily_account_id() != null && User.getFamily_account_id().length > 0 ? User.getFamily_account_id()[0] : null;
+        String token = User.getToken();
+
+        // Проверяем familyAccountId и token на null
+        if (familyAccountId == null || token == null) {
+            Log.e("ParentsFragment", "Family account ID or token is null");
+            return;
+        }
+
+        // Выполняем запрос для получения данных о семье
+        Request.requestfamily.getfamily(familyAccountId, token).enqueue(new Callback<family_accountData>() {
             @Override
             public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
+                if (response.body() == null || response.body().getData() == null) {
+                    Log.e("ParentsFragment", "Family account data is null");
+                    return;
+                }
 
                 User.setFamily_account(response.body());
-                System.out.println(response.body().getData().getName() + response.body().getData().getEmail() + response.body().getData().getPhone());
+                family_accountData.Data familyData = response.body().getData();
+
+                Log.d("ParentsFragment", "Received family data: " + familyData.getName() + ", " + familyData.getEmail() + ", " + familyData.getPhone());
+
                 parent = new Person();
-                parent.setId(response.body().getData().getUser_id());
-                parent.setFullName(response.body().getData().getName());
-                parent.setEmail(response.body().getData().getEmail());
-                parent.setImageData(response.body().getData().getImage_data());
-                parent.setPhoneNumber(response.body().getData().getPhone());
+                parent.setId(familyData.getUser_id());
+                parent.setFullName(familyData.getName());
+                parent.setEmail(familyData.getEmail());
+                parent.setPhoneNumber(familyData.getPhone());
+
                 View parentBlock = getActivity().findViewById(R.id.parentBlock);
+                if (parentBlock == null) {
+                    Log.e("ParentsFragment", "parentBlock is null");
+                    return;
+                }
+
                 ((TextView)parentBlock.findViewById(R.id.fullNameTextView)).setText(parent.getFullName());
                 ((TextView)parentBlock.findViewById(R.id.emailTextView)).setText(parent.getEmail());
                 ((TextView)parentBlock.findViewById(R.id.phoneNumberTextView)).setText(parent.getPhoneNumber());
-                ((ShapeableImageView)parentBlock.findViewById(R.id.profileImage_0)).setImageBitmap(Base64image.decode_image(response.body().getData().getImage_data()));
-                trustedPersonsList = new ArrayList<Person>();
-                for(int i = 0; i < response.body().getData().getTrusted_persons().length; i++){
-                    Request.requestTrustedPerson.getTrustedPerson(String.valueOf(response.body().getData().getTrusted_persons()[i]), User.getToken()).enqueue(new Callback<TrustedPersonData>() {
+                if (familyData.getImage_data() != null) {
+                    ((ShapeableImageView)parentBlock.findViewById(R.id.profileImage_0)).setImageBitmap(Base64image.decode_image(familyData.getImage_data()));
+                }
+
+                trustedPersonsList = new ArrayList<>();
+                for (int trustedPersonId : familyData.getTrusted_persons()) {
+                    Request.requestTrustedPerson.getTrustedPerson(String.valueOf(trustedPersonId), token).enqueue(new Callback<TrustedPersonData>() {
                         @Override
                         public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
+                            if (response.body() == null || response.body().getData() == null) {
+                                Log.e("ParentsFragment", "Trusted person data is null");
+                                return;
+                            }
+
                             Person person = new Person();
                             person.setId(response.body().getData().getId());
                             person.setFullName(response.body().getData().getName());
@@ -154,7 +185,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
 
                         @Override
                         public void onFailure(Call<TrustedPersonData> call, Throwable t) {
-
+                            Log.e("ParentsFragment", "Failed to fetch trusted person data", t);
                         }
                     });
                 }
@@ -162,8 +193,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
 
             @Override
             public void onFailure(Call<family_accountData> call, Throwable t) {
-                Log.e("Error","Errror",t);
-                System.out.println("Error");
+                Log.e("ParentsFragment", "Failed to fetch family account data", t);
             }
         });
     }
@@ -215,6 +245,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
                 ((TextView)parentBlock.findViewById(R.id.fullNameTextView)).setText(parent.getFullName());
                 ((TextView)parentBlock.findViewById(R.id.emailTextView)).setText(parent.getEmail());
                 ((TextView)parentBlock.findViewById(R.id.phoneNumberTextView)).setText(parent.getPhoneNumber());
+
             }
         }
 

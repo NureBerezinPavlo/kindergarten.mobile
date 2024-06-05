@@ -36,6 +36,10 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
 
     Boolean create;
 
+    ShapeableImageView avatar;
+
+    Bitmap bitmap;
+
     private static final int PICK_IMAGE_REQUEST = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,7 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
         fullNameEditText = findViewById(R.id.fullNameEditText);
         emailEditText = findViewById(R.id.emailEditText);
         phoneNumberEditText = findViewById(R.id.phoneNumberEditText);
+        avatar = findViewById(R.id.profileImage);
 
         View changeAvatarButton = findViewById(R.id.changeAvatarButton);
         changeAvatarButton.setOnClickListener(new View.OnClickListener() {
@@ -68,10 +73,32 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
         if (arguments == null) return;
 
         person = (Person) arguments.getSerializable(Person.class.getSimpleName());
+        if(!create){
+            Request.requestfamily.getfamily(User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<family_accountData>() {
+                @Override
+                public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
+                    fullNameEditText.setText(response.body().getData().getName());
+                    emailEditText.setText(response.body().getData().getEmail());
+                    phoneNumberEditText.setText(response.body().getData().getPhone());
+                    if(response.body().getData().getImage_data() != null){
+                        avatar.setImageBitmap(Base64image.decode_image(response.body().getData().getImage_data()));
+                    }
+                    person.setImageData(response.body().getData().getImage_data());
+                }
 
-        fullNameEditText.setText(person.getFullName());
-        emailEditText.setText(person.getEmail());
-        phoneNumberEditText.setText(person.getPhoneNumber());
+                @Override
+                public void onFailure(Call<family_accountData> call, Throwable t) {
+
+                }
+            });
+        }
+        else{
+            person = new Person();
+            fullNameEditText.setText(person.getFullName());
+            emailEditText.setText(person.getEmail());
+            phoneNumberEditText.setText(person.getPhoneNumber());
+        }
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -82,20 +109,10 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
                 ShapeableImageView imageView = findViewById(R.id.profileImage);
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 if (create){
-                    Request.requestTrustedPerson.updateTrustedPerson(String.valueOf(person.getId()),person.getFullName(),person.getEmail(),person.getPhoneNumber(),User.getFamily_account_id()[0],Base64image.encode_image(bitmap),User.getToken(),"PUT").enqueue(new Callback<TrustedPersonData>() {
-                        @Override
-                        public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<TrustedPersonData> call, Throwable t) {
-
-                        }
-                    });
+                    person.setImageData(Base64image.encode_image(bitmap));
                 }
                 else{
-                    Request.requestfamily.updateParent(User.getFamily_account_id()[0], User.getToken(),User.getId(),phoneNumberEditText.getText().toString(), Base64image.encode_image(bitmap)).enqueue(new Callback<family_accountData>() {
+                    Request.requestfamily.updateParent(User.getFamily_account_id()[0], User.getToken(),String.valueOf(person.getId()),phoneNumberEditText.getText().toString(), Base64image.encode_image(bitmap), "PUT").enqueue(new Callback<family_accountData>() {
                         @Override
                         public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
 
@@ -177,13 +194,13 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
 
 
         Intent intent = new Intent();
-        // добавить валидацию введённых данных
-        Person person = new Person();
-        person.setFullName(fullNameEditText.getText().toString());
-        person.setEmail(emailEditText.getText().toString());
-        person.setPhoneNumber(phoneNumberEditText.getText().toString());
+        if(fullNameEditText.getText().toString() != null && emailEditText.getText().toString() != null && phoneNumberEditText.getText().toString() != null){
+            person.setFullName(fullNameEditText.getText().toString());
+            person.setEmail(emailEditText.getText().toString());
+            person.setPhoneNumber(phoneNumberEditText.getText().toString());
+        }
         if(create){
-            Request.requestTrustedPerson.createTrustedPerson(fullNameEditText.getText().toString(),emailEditText.getText().toString(),phoneNumberEditText.getText().toString(),User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<TrustedPersonData>() {
+            Request.requestTrustedPerson.createTrustedPerson(fullNameEditText.getText().toString(),emailEditText.getText().toString(),phoneNumberEditText.getText().toString(),User.getFamily_account_id()[0],person.getImageData(), User.getToken()).enqueue(new Callback<TrustedPersonData>() {
                 @Override
                 public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
 
@@ -196,7 +213,7 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
             });
         }
         else{
-            Request.requestfamily.updateParent(User.getFamily_account_id()[0], User.getToken(),User.getId(),phoneNumberEditText.getText().toString(), person.getImageData()).enqueue(new Callback<family_accountData>() {
+            Request.requestfamily.updateParent(User.getFamily_account_id()[0], User.getToken(),String.valueOf(person.getId()),phoneNumberEditText.getText().toString(), person.getImageData(),"PUT").enqueue(new Callback<family_accountData>() {
                 @Override
                 public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
 

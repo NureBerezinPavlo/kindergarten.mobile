@@ -16,13 +16,13 @@ public interface RequestTrustedPerson {
 
     @FormUrlEncoded
     @POST("api/trusted_persons")
-    @Headers("Accept: application/json;charset=UTF-8")
-    Call<TrustedPersonData> createTrustedPerson(@Field("name") String name,@Field("email") String email,@Field("phone") String phone,@Field("family_account_id") String family_account_id, @Header("Authorization") String token);
+    @Headers("Accept: application/json")
+    Call<TrustedPersonData> createTrustedPerson(@Field("name") String name,@Field("email") String email,@Field("phone") String phone,@Field("family_account_id") String family_account_id,@Field("image") String image, @Header("Authorization") String token);
 
     @FormUrlEncoded
     @POST("api/trusted_persons/{id}")
-    @Headers("Accept: application/json;charset=UTF-8")
-    Call<TrustedPersonData> updateTrustedPerson(@Path("id") String id,@Field("name") String name,@Field("email") String email,@Field("phone") String phone,@Field("family_account_id") String family_account_id,@Field("image_data") String image_data,@Header("Authorization") String token, @Field("_method") String method);
+    @Headers("Accept: application/json")
+    Call<TrustedPersonData> updateTrustedPerson(@Path("id") String id,@Field("name") String name,@Field("email") String email,@Field("phone") String phone,@Field("family_account_id") String family_account_id,@Field("image") String image,@Header("Authorization") String token, @Field("_method") String method);
 
 
 }

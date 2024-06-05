@@ -19,6 +19,6 @@ public class Base64image {
         image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
 
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+        return "data:image/png;base64," + Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 }

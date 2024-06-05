@@ -29,6 +29,8 @@ public class OnePersonEditActivity extends AppCompatActivity implements View.OnC
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int DELETE_REQUEST = 2;
 
+    ShapeableImageView avatar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -90,6 +92,22 @@ public class OnePersonEditActivity extends AppCompatActivity implements View.OnC
         TextView fullNameTextView = findViewById(R.id.fullNameEditText);
         TextView emailTextView = findViewById(R.id.emailEditText);
         TextView phoneNumberTextView = findViewById(R.id.phoneNumberEditText);
+        avatar = findViewById(R.id.profileImage);
+
+        Request.requestTrustedPerson.getTrustedPerson(String.valueOf(trustedPerson.getId()), User.getToken()).enqueue(new Callback<TrustedPersonData>() {
+            @Override
+            public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
+                trustedPerson.setImageData(response.body().getData().getImage_data());
+                if(trustedPerson.getImageData() != null){
+                    avatar.setImageBitmap(Base64image.decode_image(trustedPerson.getImageData()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TrustedPersonData> call, Throwable t) {
+
+            }
+        });
 
         fullNameTextView.setText(trustedPerson.getFullName());
         emailTextView.setText(trustedPerson.getEmail());
