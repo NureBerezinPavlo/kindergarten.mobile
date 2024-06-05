@@ -75,7 +75,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
         });
 
         // Заполняем recyclerView доверенными лицами
-        UpdateRecyclerView(trustedPersonsList);
+        UpdateRecyclerView();
 
 
 
@@ -104,7 +104,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
             }
         });*/
     }
-    public void UpdateRecyclerView(ArrayList<Person> personsList) {
+    public void UpdateRecyclerView() {
         // Получаем RecyclerView и проверяем его на null
         RecyclerView trustedPersonsRecyclerView = getActivity().findViewById(R.id.trustedPersonsRecyclerView);
         if (trustedPersonsRecyclerView == null) {
@@ -113,7 +113,7 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
         }
 
         // Создаем адаптер и LayoutManager для RecyclerView
-        TrustedPersonAdapter adapter = new TrustedPersonAdapter(personsList, this);
+        TrustedPersonAdapter adapter = new TrustedPersonAdapter(trustedPersonsList, this);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(requireContext(), 1);
 
         // Устанавливаем LayoutManager и адаптер для RecyclerView
@@ -202,52 +202,9 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if(data == null) return;
-
-        if (requestCode == 1) { // изменеие или удаление доверенного лица
-            if (selectedPersonView == null) return;
-
-            Person trustedPerson = (Person)data.getSerializableExtra(Person.class.getSimpleName());
-
-            Boolean is_deleted = data.getBooleanExtra("is_deleted", false);
-
-            if (is_deleted) {
-                TrustedPersonAdapter adapter = (TrustedPersonAdapter) recyclerView.getAdapter();
-                adapter.personsArraylist.remove(selectedPersonIndex);
-                UpdateRecyclerView(adapter.personsArraylist);
-                return;
-            }
-
-            TextView fullNameTextView = selectedPersonView.findViewById(R.id.fullNameTextView);
-            TextView emailTextView = selectedPersonView.findViewById(R.id.emailTextView);
-            TextView phoneNumberTextView = selectedPersonView.findViewById(R.id.phoneNumberTextView);
-
-            fullNameTextView.setText(trustedPerson.getFullName());
-            emailTextView.setText(trustedPerson.getEmail());
-            phoneNumberTextView.setText(trustedPerson.getPhoneNumber());
-
-            ArrayList<Person> persons = ((TrustedPersonAdapter) recyclerView.getAdapter()).personsArraylist;
-            persons.get(selectedPersonIndex).setFullName(trustedPerson.getFullName());
-            persons.get(selectedPersonIndex).setEmail(trustedPerson.getEmail());
-            persons.get(selectedPersonIndex).setPhoneNumber(trustedPerson.getPhoneNumber());
-        } else if (requestCode == 2) { // добавление доверенного лица
-            Person person = (Person)data.getSerializableExtra("parent");
-            adapter = (TrustedPersonAdapter) recyclerView.getAdapter();
-            adapter.personsArraylist.add(person);
-            UpdateRecyclerView(adapter.personsArraylist);
-        } else if(requestCode == 3) { // изменение родителя
-            Person newParent = (Person)data.getSerializableExtra("parent");
-            if(newParent != null)
-            {
-                parent = newParent;
-                View parentBlock = getActivity().findViewById(R.id.parentBlock);
-                ((TextView)parentBlock.findViewById(R.id.fullNameTextView)).setText(parent.getFullName());
-                ((TextView)parentBlock.findViewById(R.id.emailTextView)).setText(parent.getEmail());
-                ((TextView)parentBlock.findViewById(R.id.phoneNumberTextView)).setText(parent.getPhoneNumber());
-
-            }
-        }
+        parent = new Person();
+        trustedPersonsList = new ArrayList<Person>();
+        UpdateRecyclerView();
 
         /*if(requestCode == )
         ArrayList<Person> temporaryPersonsList = (ArrayList<Person>) data.getSerializableExtra("persons_arraylist");
