@@ -5,10 +5,13 @@ import androidx.core.content.ContextCompat;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +24,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -33,6 +37,8 @@ import retrofit2.Response;
 public class ChildEditActivity extends AppCompatActivity {
 
     Child child;
+    private static final int PICK_IMAGE_REQUEST = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -295,5 +301,57 @@ public class ChildEditActivity extends AppCompatActivity {
                 }
             }
         });
+        View changeAvatarButton = findViewById(R.id.changeAvatarButton);
+        changeAvatarButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, PICK_IMAGE_REQUEST);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            try {
+                ShapeableImageView imageView = findViewById(R.id.profileImage);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+
+                // Никит, переиначиваешь запросы так, чтобы ава обновлялась у ребёнка.
+                // Этот коммент потом сотрёшь.
+                // И не забудь изменить фотку для child (поле в самом верху)
+
+                /*
+                Request.requestTrustedPerson.updateTrustedPerson(String.valueOf(trustedPerson.getId()),
+                        trustedPerson.getFullName(),trustedPerson.getEmail(),trustedPerson.getPhoneNumber(),
+                        User.getFamily_account_id()[0],Base64image.encode_image(bitmap),User.getToken(),
+                        "PUT").enqueue(new Callback<TrustedPersonData>() {
+                    @Override
+                    public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<TrustedPersonData> call, Throwable t) {
+
+                    }
+                });*/
+                imageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent = new Intent();
+        intent.putExtra(Child.class.getSimpleName(), child);
+        setResult(RESULT_OK, intent);
+        finish();
+        super.onBackPressed();
     }
 }

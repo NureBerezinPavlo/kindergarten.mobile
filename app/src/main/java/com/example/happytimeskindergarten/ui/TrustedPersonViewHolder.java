@@ -18,8 +18,8 @@ public class TrustedPersonViewHolder extends RecyclerView.ViewHolder implements 
         fullNameTextView = itemView.findViewById(R.id.fullNameTextView);
         emailTextView = itemView.findViewById(R.id.emailTextView);
         phoneNumberTextView = itemView.findViewById(R.id.phoneNumberTextView);
+        avatar = itemView.findViewById(R.id.profileImage_0);
         this.onItemListener = onItemListener;
-        this.avatar = itemView.findViewById(R.id.profileImage_0);
         this.person = person;
         itemView.setOnClickListener(this);
     }

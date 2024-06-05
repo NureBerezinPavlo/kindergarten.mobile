@@ -33,23 +33,9 @@ public class TrustedPersonAdapter extends RecyclerView.Adapter<TrustedPersonView
         View itsLayout = layoutInflater.inflate(R.layout.person_data_block, parent, false);
         itsLayouts.add(itsLayout);
 
-        View photoAndFullnameView = itsLayout.findViewById(R.id.photoAndFullname);
-        View emailTextView = itsLayout.findViewById(R.id.emailTextView);
-        View phoneNumberTextView = itsLayout.findViewById(R.id.phoneNumberTextView);
-
-        /*int totalHeight = measureView(photoAndFullnameView)
-                + measureView(emailTextView)
-                + measureView(phoneNumberTextView);
-
-        ViewGroup.LayoutParams layoutParams = itsLayout.getLayoutParams();
-        layoutParams.height = totalHeight;*/
-
         return new TrustedPersonViewHolder(itsLayout, onItemListener, personsArraylist.get(viewType));
     }
-    private int measureView(View view) {
-        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        return view.getMeasuredHeight() + view.getPaddingTop() + view.getPaddingBottom();
-    }
+
     @Override
     public void onBindViewHolder(@NonNull TrustedPersonViewHolder holder, int i)
     {
