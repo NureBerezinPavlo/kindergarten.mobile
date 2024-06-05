@@ -65,7 +65,15 @@ public class ScheduleActivity extends AppCompatActivity implements ClassItemAdap
 
         monthYearText.setText(MonthYearFromDate());
 
-        List<List<ClassItem>> classesJaggedList = new ArrayList<List<ClassItem>>();
+        List<List<ClassItem>> classesJaggedList = new ArrayList<List<ClassItem>>() {{
+            add(new ArrayList<ClassItem>() {});
+            add(new ArrayList<ClassItem>() {});
+            add(new ArrayList<ClassItem>() {});
+            add(new ArrayList<ClassItem>() {});
+            add(new ArrayList<ClassItem>() {});
+            add(new ArrayList<ClassItem>() {});
+            add(new ArrayList<ClassItem>() {});
+        }};
 
         for (int i = 0; i < 7; i++) {
             final int day = i;
