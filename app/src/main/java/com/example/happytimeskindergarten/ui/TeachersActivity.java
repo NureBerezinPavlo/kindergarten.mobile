@@ -52,6 +52,7 @@ public class TeachersActivity extends AppCompatActivity implements TeacherAdapte
                     teacher.setFullName(staff.getName());
                     teacher.setEmail(staff.getEmail());
                     teacher.setPhoneNumber(staff.getPhone());
+                    teacher.setImageData(staff.getImageData());
                     personsList.add(teacher);
                     adapter.loadTeachers(personsList);
                 }
