@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.happytimeskindergarten.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -199,32 +200,42 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
             person.setEmail(emailEditText.getText().toString());
             person.setPhoneNumber(phoneNumberEditText.getText().toString());
         }
-        if(create){
-            Request.requestTrustedPerson.createTrustedPerson(fullNameEditText.getText().toString(),emailEditText.getText().toString(),phoneNumberEditText.getText().toString(),User.getFamily_account_id()[0],person.getImageData(), User.getToken()).enqueue(new Callback<TrustedPersonData>() {
-                @Override
-                public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
-
-                }
-
-                @Override
-                public void onFailure(Call<TrustedPersonData> call, Throwable t) {
-
-                }
-            });
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        String phonePattern = "\\+380\\d{9}";
+        if (!person.getPhoneNumber().matches(phonePattern)) {
+            Toast.makeText(getApplicationContext(), "Некоректний номер телефону", Toast.LENGTH_SHORT).show();
+        }
+        else if (!person.getEmail().matches(emailPattern)){
+            Toast.makeText(getApplicationContext(), "Некоректна email адреса", Toast.LENGTH_SHORT).show();
         }
         else{
-            Request.requestfamily.updateParentPhone(User.getFamily_account_id()[0], User.getToken(),String.valueOf(person.getId()),phoneNumberEditText.getText().toString(),"PUT").enqueue(new Callback<family_accountData>() {
-                @Override
-                public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
+            if(create){
+                Request.requestTrustedPerson.createTrustedPerson(fullNameEditText.getText().toString(),emailEditText.getText().toString(),phoneNumberEditText.getText().toString(),User.getFamily_account_id()[0],person.getImageData(), User.getToken()).enqueue(new Callback<TrustedPersonData>() {
+                    @Override
+                    public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
 
-                }
+                    }
 
-                @Override
-                public void onFailure(Call<family_accountData> call, Throwable t) {
+                    @Override
+                    public void onFailure(Call<TrustedPersonData> call, Throwable t) {
 
-                }
-            });
+                    }
+                });
+            }
+            else{
+                Request.requestfamily.updateParentPhone(User.getFamily_account_id()[0], User.getToken(),String.valueOf(person.getId()),phoneNumberEditText.getText().toString(),"PUT").enqueue(new Callback<family_accountData>() {
+                    @Override
+                    public void onResponse(Call<family_accountData> call, Response<family_accountData> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<family_accountData> call, Throwable t) {
+
+                    }
+                });
+            }
+            finish();
         }
-        finish();
     }
 }

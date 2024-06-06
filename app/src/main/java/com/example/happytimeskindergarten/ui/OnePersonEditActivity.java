@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.happytimeskindergarten.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -194,21 +196,32 @@ public class OnePersonEditActivity extends AppCompatActivity implements View.OnC
         trustedPerson.setFullName(fullNameEditText.getText().toString());
         trustedPerson.setEmail(emailEditText.getText().toString());
         trustedPerson.setPhoneNumber(phoneNumberEditText.getText().toString());
-        Request.requestTrustedPerson.updateTrustedPerson(String.valueOf(trustedPerson.getId()),fullNameEditText.getText().toString(),emailEditText.getText().toString(),phoneNumberEditText.getText().toString(),User.getFamily_account_id()[0],trustedPerson.getImageData(),User.getToken(),"PUT").enqueue(new Callback<TrustedPersonData>() {
-            @Override
-            public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        String phonePattern = "\\+380\\d{9}";
+        if (!trustedPerson.getPhoneNumber().matches(phonePattern)) {
+            Toast.makeText(getApplicationContext(), "Некоректний номер телефону", Toast.LENGTH_SHORT).show();
+        }
+        else if (!trustedPerson.getEmail().matches(emailPattern)){
+            Toast.makeText(getApplicationContext(), "Некоректна email адреса", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Request.requestTrustedPerson.updateTrustedPerson(String.valueOf(trustedPerson.getId()),fullNameEditText.getText().toString(),emailEditText.getText().toString(),phoneNumberEditText.getText().toString(),User.getFamily_account_id()[0],trustedPerson.getImageData(),User.getToken(),"PUT").enqueue(new Callback<TrustedPersonData>() {
+                @Override
+                public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
 
-            }
+                }
 
-            @Override
-            public void onFailure(Call<TrustedPersonData> call, Throwable t) {
+                @Override
+                public void onFailure(Call<TrustedPersonData> call, Throwable t) {
 
-            }
-        });
-        Intent intent = new Intent();
-        intent.putExtra(Person.class.getSimpleName(), trustedPerson);
+                }
+            });
+            Intent intent = new Intent();
+            intent.putExtra(Person.class.getSimpleName(), trustedPerson);
 
-        setResult(RESULT_OK, intent);
-        finish();
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+
     }
 }
