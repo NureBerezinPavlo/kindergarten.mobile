@@ -178,7 +178,6 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
                             person.setFullName(response.body().getData().getName());
                             person.setEmail(response.body().getData().getEmail());
                             person.setPhoneNumber(response.body().getData().getPhone());
-                            person.setImageData(response.body().getData().getImage_data());
                             trustedPersonsList.add(person);
                             adapter.loadTrustedPersons(trustedPersonsList);
                         }
@@ -205,24 +204,6 @@ public class ParentsFragment extends Fragment implements TrustedPersonAdapter.On
         parent = new Person();
         trustedPersonsList = new ArrayList<Person>();
         UpdateRecyclerView();
-
-        /*if(requestCode == )
-        ArrayList<Person> temporaryPersonsList = (ArrayList<Person>) data.getSerializableExtra("persons_arraylist");
-        if(temporaryPersonsList != null)
-        {
-            trustedPersonsList = temporaryPersonsList;
-            UpdateRecyclerView(trustedPersonsList);
-        }
-
-        Person newParent = (Person)data.getSerializableExtra("parent");
-        if(newParent != null)
-        {
-            parent = newParent;
-            View parentBlock = getActivity().findViewById(R.id.parentBlock);
-            ((TextView)parentBlock.findViewById(R.id.fullNameTextView)).setText(parent.getFullName());
-            ((TextView)parentBlock.findViewById(R.id.emailTextView)).setText(parent.getEmail());
-            ((TextView)parentBlock.findViewById(R.id.phoneNumberTextView)).setText(parent.getPhoneNumber());
-        }*/
     }
 
     @Override

@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.happytimeskindergarten.R;
+import com.google.android.material.imageview.ShapeableImageView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,20 +53,31 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildViewHolder>
     @Override
     public void onBindViewHolder(@NonNull ChildViewHolder holder, int i)
     {
+        final int position = i;
         holder.fullNameTextView.setText(childrenArraylist.get(i).getFullName());
         holder.child = childrenArraylist.get(i);
-        if (holder.child.getImage_data() != null){
-            System.out.println("image data" + holder.child.getImage_data());
-            holder.profileImage.setImageBitmap(Base64image.decode_image(childrenArraylist.get(i).getImage_data()));
-        }
-        else{
-            if(childrenArraylist.get(i).getGender() == Child.Gender.FEMALE)
-            {
-                // Аватарка девочки по умолчанию
-                Drawable drawable = ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.childphotodefault_female2);
-                holder.profileImage.setImageDrawable(drawable);
+        Request.requestChildren.getChildrens(String.valueOf(childrenArraylist.get(i).getId()), User.getToken()).enqueue(new Callback<ChildData>() {
+            @Override
+            public void onResponse(Call<ChildData> call, Response<ChildData> response) {
+                if(response.body().getData().getImage_data() != null){
+                    holder.profileImage.setImageBitmap(Base64image.decode_image(response.body().getData().getImage_data()));
+                }
+                else{
+                    if(childrenArraylist.get(position).getGender() == Child.Gender.FEMALE)
+                    {
+                        // Аватарка девочки по умолчанию
+                        Drawable drawable = ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.childphotodefault_female2);
+                        holder.profileImage.setImageDrawable(drawable);
+                    }
+                }
             }
-        }
+
+
+            @Override
+            public void onFailure(Call<ChildData> call, Throwable t) {
+
+            }
+        });
         // !!! Здесь должна быть проверка, есть ли фото в базе данных.
         // Если фото нет, оставляем фото по умолчанию.
 

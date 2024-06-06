@@ -225,9 +225,6 @@ public class PersonEditWithoutDeletingActivity extends AppCompatActivity impleme
                 }
             });
         }
-        intent.putExtra("parent", person);
-
-        setResult(RESULT_OK, intent);
         finish();
     }
 }

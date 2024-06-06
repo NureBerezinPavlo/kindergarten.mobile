@@ -12,6 +12,10 @@ import com.example.happytimeskindergarten.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class TrustedPersonAdapter extends RecyclerView.Adapter<TrustedPersonViewHolder>
 {
     public List<View> itsLayouts;
@@ -43,9 +47,20 @@ public class TrustedPersonAdapter extends RecyclerView.Adapter<TrustedPersonView
         holder.fullNameTextView.setText(personsArraylist.get(i).getFullName());
         holder.emailTextView.setText(personsArraylist.get(i).getEmail());
         holder.phoneNumberTextView.setText(personsArraylist.get(i).getPhoneNumber());
-        if(holder.person.getImageData() != null){
-            holder.avatar.setImageBitmap(Base64image.decode_image(holder.person.getImageData()));
-        }
+        Request.requestTrustedPerson.getTrustedPerson(String.valueOf(holder.person.getId()), User.getToken()).enqueue(new Callback<TrustedPersonData>() {
+            @Override
+            public void onResponse(Call<TrustedPersonData> call, Response<TrustedPersonData> response) {
+                if(response.body().getData().getImage_data() != null){
+                    holder.avatar.setImageBitmap(Base64image.decode_image(response.body().getData().getImage_data()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TrustedPersonData> call, Throwable t) {
+
+            }
+        });
+
     }
 
     @Override

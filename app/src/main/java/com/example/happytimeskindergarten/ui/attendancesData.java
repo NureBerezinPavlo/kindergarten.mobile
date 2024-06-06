@@ -1,6 +1,29 @@
 package com.example.happytimeskindergarten.ui;
 
+import com.google.gson.annotations.SerializedName;
+
 public class attendancesData {
+    @SerializedName("error")
+    String error;
+    @SerializedName("message")
+    String message;
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     Data data;
 
     public Data getData() {

@@ -52,7 +52,7 @@ public class ChildEditActivity extends AppCompatActivity {
         TextView dateOfBirthTextView = findViewById(R.id.dateOfBirthTextView);
         TextView diseasesTextView = findViewById(R.id.diseasesText).findViewById(R.id.contentTextView);
         TextView allergiesTextView = findViewById(R.id.allergiesText).findViewById(R.id.contentTextView);
-
+        ShapeableImageView avatar = findViewById(R.id.profileImage);
         child = (Child)arguments.getSerializable(Child.class.getSimpleName());
 
         fullNameTextView.setText(child.getFullName());
@@ -62,7 +62,19 @@ public class ChildEditActivity extends AppCompatActivity {
         groupNameTextView.setText("Група: " + child.getGroup_name());
         diseasesTextView.setText(child.getIllnesses());
         allergiesTextView.setText(child.getAllergies());
+        Request.requestChildren.getChildrens(String.valueOf(child.getId()), User.getToken()).enqueue(new Callback<ChildData>() {
+            @Override
+            public void onResponse(Call<ChildData> call, Response<ChildData> response) {
+                if(response.body().getData().getImage_data() != null){
+                    avatar.setImageBitmap(Base64image.decode_image(response.body().getData().getImage_data()));
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ChildData> call, Throwable t) {
+
+            }
+        });
         // аватарка
         ShapeableImageView profileImage = findViewById(R.id.profileImage);
         if(child.getImage_data() != null){
@@ -217,7 +229,7 @@ public class ChildEditActivity extends AppCompatActivity {
             LocalDate date = LocalDate.now();
             @Override
             public void onClick(View v) {
-                if (currentTime.getHour() > 10) {
+                if (currentTime.getHour() < 10) {
                     View dialogBinding = getLayoutInflater().inflate(R.layout.edit_text_dialog_window, null);
                     Dialog myDialog = new Dialog(ChildEditActivity.this);
                     myDialog.setContentView(dialogBinding);
@@ -225,7 +237,7 @@ public class ChildEditActivity extends AppCompatActivity {
 
                     EditText editText = myDialog.findViewById(R.id.editText);
                     TextView titleTextView = myDialog.findViewById(R.id.titleTextView);
-                    titleTextView.setText("Вкажіть причину");
+                    titleTextView.setText("Вкажіть причину на сьогодні");
 
                     if (myDialog.getWindow() != null) {
                         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -275,7 +287,9 @@ public class ChildEditActivity extends AppCompatActivity {
                                     Request.requestattendances.pushattendance(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), editText.getText().toString(), User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<attendancesData>() {
                                         @Override
                                         public void onResponse(Call<attendancesData> call, Response<attendancesData> response) {
-
+                                            if(response.body().getError() != null){
+                                                System.out.println("Лох");
+                                            }
                                         }
 
                                         @Override
@@ -297,7 +311,86 @@ public class ChildEditActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    Toast.makeText(getApplicationContext(), "Час для повідомлення про відсутність сплинув.", Toast.LENGTH_SHORT).show();
+                    View dialogBinding = getLayoutInflater().inflate(R.layout.edit_text_dialog_window, null);
+                    Dialog myDialog = new Dialog(ChildEditActivity.this);
+                    myDialog.setContentView(dialogBinding);
+                    myDialog.setCancelable(true);
+
+                    EditText editText = myDialog.findViewById(R.id.editText);
+                    TextView titleTextView = myDialog.findViewById(R.id.titleTextView);
+                    titleTextView.setText("Вкажіть причину на завтра");
+
+                    if (myDialog.getWindow() != null) {
+                        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    }
+                    myDialog.show();
+                    // Кнопка закрытия диалогового окна без сохранения текста из поля ввода
+                    FloatingActionButton closeButton = dialogBinding.findViewById(R.id.closeButton);
+                    closeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            myDialog.cancel();
+                        }
+                    });
+                    // Кнопка сохранения текста из диалогового окна
+                    Button safeButton = dialogBinding.findViewById(R.id.safeButton);
+                    safeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            View confirmDialogBinding = getLayoutInflater().inflate(R.layout.comfirmation_dialog_block, null);
+                            Dialog confirmDialog = new Dialog(ChildEditActivity.this);
+                            confirmDialog.setContentView(confirmDialogBinding);
+                            confirmDialog.setCancelable(true);
+
+                            if (confirmDialog.getWindow() != null) {
+                                confirmDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            }
+                            confirmDialog.show();
+
+                            TextView messageTextView = confirmDialog.findViewById(R.id.messageTextView);
+                            messageTextView.setText("Чи дійсно підтверджуєте відсутність дитини?");
+
+                            FloatingActionButton closeButton = confirmDialogBinding.findViewById(R.id.closeButton);
+                            closeButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    confirmDialog.cancel();
+                                }
+                            });
+
+                            Button yesButton = confirmDialogBinding.findViewById(R.id.yesButton);
+                            yesButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // сохраняем где-то текст с причиной отсутствия (он в editText)
+                                    date.plusDays(1);
+                                    Request.requestattendances.pushattendance(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), editText.getText().toString(), User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<attendancesData>() {
+                                        @Override
+                                        public void onResponse(Call<attendancesData> call, Response<attendancesData> response) {
+                                            if(response.body().getError() != null){
+                                                System.out.println("Лох");
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<attendancesData> call, Throwable t) {
+
+                                        }
+                                    });
+                                    confirmDialog.cancel();
+                                    myDialog.cancel();
+                                }
+                            });
+                            Button noButton = confirmDialogBinding.findViewById(R.id.noButton);
+                            noButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    confirmDialog.cancel();
+                                }
+                            });
+                        }
+                    });
                 }
             }
         });
