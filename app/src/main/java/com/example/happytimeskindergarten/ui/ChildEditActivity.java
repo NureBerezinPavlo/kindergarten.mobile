@@ -287,9 +287,7 @@ public class ChildEditActivity extends AppCompatActivity {
                                     Request.requestattendances.pushattendance(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), editText.getText().toString(), User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<attendancesData>() {
                                         @Override
                                         public void onResponse(Call<attendancesData> call, Response<attendancesData> response) {
-                                            if(response.body().getError() != null){
-                                                System.out.println("Лох");
-                                            }
+
                                         }
 
                                         @Override
@@ -368,9 +366,7 @@ public class ChildEditActivity extends AppCompatActivity {
                                     Request.requestattendances.pushattendance(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), editText.getText().toString(), User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<attendancesData>() {
                                         @Override
                                         public void onResponse(Call<attendancesData> call, Response<attendancesData> response) {
-                                            if(response.body().getError() != null){
-                                                System.out.println("Лох");
-                                            }
+
                                         }
 
                                         @Override
