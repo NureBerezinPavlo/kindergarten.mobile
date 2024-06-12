@@ -7,10 +7,12 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
+import org.json.simple.JSONObject;
+
 public interface Requestattendances {
     @FormUrlEncoded
     @POST("api/attendances")
     @Headers("Accept: application/json;charset=UTF-8")
-    Call<attendancesData> pushattendance(@Field("date") String date, @Field("reason") String reason, @Field("child_profile_id") String child_profile_id, @Header("Authorization") String token);
+    Call<JSONObject> pushattendance(@Field("date") String date, @Field("reason") String reason, @Field("child_profile_id") String child_profile_id, @Header("Authorization") String token);
 
 }

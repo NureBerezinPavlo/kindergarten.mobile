@@ -35,6 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import org.json.simple.JSONObject;
 public class ChildEditActivity extends AppCompatActivity {
 
     Child child;
@@ -284,14 +285,14 @@ public class ChildEditActivity extends AppCompatActivity {
                                 public void onClick(View v) {
                                     // сохраняем где-то текст с причиной отсутствия (он в editText)
 
-                                    Request.requestattendances.pushattendance(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), editText.getText().toString(), User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<attendancesData>() {
+                                    Request.requestattendances.pushattendance(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), editText.getText().toString(), User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<JSONObject>() {
                                         @Override
-                                        public void onResponse(Call<attendancesData> call, Response<attendancesData> response) {
+                                        public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
 
                                         }
 
                                         @Override
-                                        public void onFailure(Call<attendancesData> call, Throwable t) {
+                                        public void onFailure(Call<JSONObject> call, Throwable t) {
 
                                         }
                                     });
@@ -362,20 +363,28 @@ public class ChildEditActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(View v) {
                                     // сохраняем где-то текст с причиной отсутствия (он в editText)
-                                    date.plusDays(1);
-                                    Request.requestattendances.pushattendance(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), editText.getText().toString(), User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<attendancesData>() {
+                                    date = date.plusDays(1);
+                                    Request.requestattendances.pushattendance(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), editText.getText().toString(), User.getFamily_account_id()[0], User.getToken()).enqueue(new Callback<JSONObject>() {
                                         @Override
-                                        public void onResponse(Call<attendancesData> call, Response<attendancesData> response) {
+                                        public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                                            if(response.errorBody() != null){
+                                                Toast.makeText(getApplicationContext(), "Відсутність вже відмічено", Toast.LENGTH_SHORT).show();
+                                                confirmDialog.cancel();
 
+                                            }
+                                            else {
+                                                Toast.makeText(getApplicationContext(), "Відсутність відмічено", Toast.LENGTH_SHORT).show();
+                                                confirmDialog.cancel();
+                                                myDialog.cancel();
+
+                                            }
                                         }
 
                                         @Override
-                                        public void onFailure(Call<attendancesData> call, Throwable t) {
+                                        public void onFailure(Call<JSONObject> call, Throwable t) {
 
                                         }
                                     });
-                                    confirmDialog.cancel();
-                                    myDialog.cancel();
                                 }
                             });
                             Button noButton = confirmDialogBinding.findViewById(R.id.noButton);
